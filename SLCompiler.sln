@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicTokenizer", "SLCompiler\BasicTokenizer.csproj", "{78CC34F0-4F2A-462D-9B3D-A89C272EE116}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2FE9C91-7733-415E-AF3E-2EB213A14EAB}"
+	ProjectSection(SolutionItems) = preProject
+		SyntaxDefinition.txt = SyntaxDefinition.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RLTokenizer", "RLTokenizer\RLTokenizer.csproj", "{BC2B5B7D-EE24-4B7C-8755-B9D4C71E6290}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78CC34F0-4F2A-462D-9B3D-A89C272EE116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78CC34F0-4F2A-462D-9B3D-A89C272EE116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78CC34F0-4F2A-462D-9B3D-A89C272EE116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78CC34F0-4F2A-462D-9B3D-A89C272EE116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC2B5B7D-EE24-4B7C-8755-B9D4C71E6290}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC2B5B7D-EE24-4B7C-8755-B9D4C71E6290}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC2B5B7D-EE24-4B7C-8755-B9D4C71E6290}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC2B5B7D-EE24-4B7C-8755-B9D4C71E6290}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AD8EF3E9-8569-45FE-8BAB-CAD357E8B7A2}
+	EndGlobalSection
+EndGlobal

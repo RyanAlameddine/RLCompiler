@@ -1,0 +1,11 @@
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicParser.csprojAssemblyReference.cache
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicParser.AssemblyInfoInputs.cache
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicParser.AssemblyInfo.cs
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicParser.exe
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicParser.deps.json
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicParser.runtimeconfig.json
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicParser.runtimeconfig.dev.json
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicParser.dll
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicParser.pdb
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicParser.dll
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicParser.pdb
