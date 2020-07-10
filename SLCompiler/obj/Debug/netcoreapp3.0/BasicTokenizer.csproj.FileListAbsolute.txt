@@ -1,0 +1,11 @@
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicTokenizer.exe
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicTokenizer.deps.json
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicTokenizer.runtimeconfig.json
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicTokenizer.runtimeconfig.dev.json
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicTokenizer.dll
+C:\Users\rhala\Code\SLCompiler\SLCompiler\bin\Debug\netcoreapp3.0\BasicTokenizer.pdb
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicTokenizer.csprojAssemblyReference.cache
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicTokenizer.AssemblyInfoInputs.cache
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicTokenizer.AssemblyInfo.cs
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicTokenizer.dll
+C:\Users\rhala\Code\SLCompiler\SLCompiler\obj\Debug\netcoreapp3.0\BasicTokenizer.pdb

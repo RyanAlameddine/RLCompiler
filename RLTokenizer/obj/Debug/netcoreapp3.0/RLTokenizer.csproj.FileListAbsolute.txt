@@ -1,0 +1,11 @@
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\bin\Debug\netcoreapp3.0\RLTokenizer.exe
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\bin\Debug\netcoreapp3.0\RLTokenizer.deps.json
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\bin\Debug\netcoreapp3.0\RLTokenizer.runtimeconfig.json
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\bin\Debug\netcoreapp3.0\RLTokenizer.runtimeconfig.dev.json
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\bin\Debug\netcoreapp3.0\RLTokenizer.dll
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\bin\Debug\netcoreapp3.0\RLTokenizer.pdb
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\obj\Debug\netcoreapp3.0\RLTokenizer.csprojAssemblyReference.cache
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\obj\Debug\netcoreapp3.0\RLTokenizer.AssemblyInfoInputs.cache
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\obj\Debug\netcoreapp3.0\RLTokenizer.AssemblyInfo.cs
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\obj\Debug\netcoreapp3.0\RLTokenizer.dll
+C:\Users\rhala\Code\SLCompiler\RLTokenizer\obj\Debug\netcoreapp3.0\RLTokenizer.pdb

@@ -38,7 +38,7 @@
 
 namespace Test
 
-public class Program
+class Program
 {
 	var x:int
 	var coolObject:Ball
@@ -55,11 +55,11 @@ public class Program
 		coolObject.PrintName
 
 		#delegate magic
-		~coolObject.PrintName~ -> magicalDelegate
+		(\ => coolObject.PrintName) -> magicalDelegate
 		magicalDelegate
 	}
 
-	def Add :: a:int, b:int, c:int -> int, 
+	def Add :: a:int, b:int, c:int -> int
 	{
 		ret a + b + c
 	}
@@ -73,7 +73,7 @@ public class Program
 
 namespace Test
 
-public class Ball : Sprite
+class Ball : Sprite
 {
 
 private:
