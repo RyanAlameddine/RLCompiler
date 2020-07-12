@@ -17,7 +17,7 @@ namespace RLTokenizer.Scopes
 
             if(Children.Count == 0)
             {
-                if (token.IsLineOrWhitespace()) return (true, new IdentifierContext());
+                if (token.IsNewlineOrWhitespace()) return (true, new IdentifierContext());
 
                 throw new TokenizationException("No whitespace after class declaration");
             }
@@ -29,7 +29,7 @@ namespace RLTokenizer.Scopes
                 return (true, new ClassBodyContext());
             }
 
-            if (token.IsLineOrWhitespace()) return (true, this);
+            if (token.IsNewlineOrWhitespace()) return (true, this);
 
             throw new TokenizationException("Invalid Identifier in class declaration");
         }

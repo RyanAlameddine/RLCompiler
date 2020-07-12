@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace RLTokenizer.Scopes
 {
@@ -20,7 +21,21 @@ namespace RLTokenizer.Scopes
                 .Select((x) => (x.Name, x.Type)).ToArray();
         }
 
-        public string ReturnType { get => ((IdentifierContext)Children.Last.Previous.Value).Identifier; }
+        public string ReturnType 
+        { 
+            get
+            {
+                if (Children.Count < 3) return "void";
+
+                var last = Children.Last.Previous.Value;
+                if(last is VariableOrIdentifierDefinitionContext c)
+                {
+                    if (!c.IsVariable) return c.Name;
+                    throw new TokenizationException("Return type is set to a variable declaration");
+                }
+                return ((IdentifierContext)last).Identifier;
+            }
+        }
 
         public FunctionHeaderContext(AccessModifiers accessModifier)
         {
@@ -29,16 +44,22 @@ namespace RLTokenizer.Scopes
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
-            if (token == "{") return (true, new FunctionBodyContext());
+            if (token == "{") return (true, new ScopeBodyContext());
 
             if (arrowPresent)
             {
-                if (token.IsLineOrWhitespace()) return (true, this);
+                if (token.IsNewlineOrWhitespace()) return (true, this);
                 //add support for multiple returns here
             }
             
             if (colonPresent)
             {
+                if (Children.Last.Value is VariableOrIdentifierDefinitionContext v && !v.IsVariable)
+                {
+                    if(!token.IsNewlineOrWhitespace()) throw new TokenizationException("Unexpected character found after return type");
+                    return (true, this);
+                }
+
                 if (token == "-") 
                     return (false, this);
                 if(token == "->")
@@ -61,20 +82,19 @@ namespace RLTokenizer.Scopes
                     namePresent = true;
                     return (true, new IdentifierContext());
                 }
-                if (!token.IsLineOrWhitespace()) 
+                if (!token.IsNewlineOrWhitespace()) 
                     throw new TokenizationException("No whitespace found after function declaration");
             }
 
             if(Children.Count == 1)
             {
-                if (token.IsWhitespace()) return (true, this);
+                if (token.IsNewlineOrWhitespace()) return (true, this);
                 if (token == ":") return (false, this);
                 if (token == "::")
                 {
                     colonPresent = true;
-                    return (true, new VariableDefinitionContext(AccessModifiers.Function, ","));
+                    return (true, new VariableOrIdentifierDefinitionContext(AccessModifiers.Function, ","));
                 }
-
                 throw new TokenizationException("No :: found after function declaration");
             }
 
@@ -87,6 +107,8 @@ namespace RLTokenizer.Scopes
             sb.Append(Name);
             sb.Append(", Return Type: ");
             sb.Append(ReturnType);
+            sb.Append(", Access: ");
+            sb.Append(AccessModifier);
             sb.Append(")");
 
             return sb.ToString();

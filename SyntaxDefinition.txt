@@ -42,24 +42,23 @@ class Program
 {
 	var x:int
 	var coolObject:Ball
-	var magicalDelegate:~void
-	var unusedDelegate:~[int]
+	var magicalDelegate:delegate
 
 	def Main :: args:[int] -> void
 	{
-		Add 1, 2, 3 -> x
+		Add 1 2 3 -> x
 
-		Add x, 2, (Add 1, 2, 3) -> x
+		Add x 2 (Add 1 2 3) -> x
 
 		new Ball "wowowie" -> coolObject
-		coolObject.PrintName
+		coolObject.PrintName ()
 
 		#delegate magic
-		(\ => coolObject.PrintName) -> magicalDelegate
-		magicalDelegate
+		coolObject.PrintName -> magicalDelegate
+		magicalDelegate ()
 	}
 
-	def Add :: a:int, b:int, c:int -> int
+	def Add :: a:int b:int c:int -> int
 	{
 		ret a + b + c
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RLTokenizer
@@ -18,7 +19,6 @@ namespace RLTokenizer
             ReadOnlySpan<char> codeSpan = code;
             bool reset = true;
 
-            int lineNumber = 0;
             int tokenStart = 0;
             for(int i = 0; i < codeSpan.Length; i++)
             {
@@ -32,18 +32,12 @@ namespace RLTokenizer
                 catch (TokenizationException e)
                 {
                     Console.WriteLine(e);
-                    Console.WriteLine("On line " + lineNumber);
+                    Console.WriteLine("On line " + code.Take(i).Count(c => c == '\n') + 1);
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine();
                     return root;
                 }
-
-                if (codeSpan[i].ToString().IsNewline())
-                {
-                    lineNumber++;
-                }
-
 
                 if (scope != previousScope && scope.Parent == null)
                 {

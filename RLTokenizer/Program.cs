@@ -9,7 +9,7 @@ namespace RLTokenizer
         static void Main(string[] args)
         {
 
-            string path = @"C:\Users\rhala\Code\SLCompiler\variableclass.rl"; //Console.ReadLine();
+            string path = @$"C:\Users\rhala\Code\SLCompiler\{Console.ReadLine()}.rl";
             while (true)
             {
                 string code = File.ReadAllText(path);

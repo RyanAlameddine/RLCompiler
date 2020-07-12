@@ -4,9 +4,9 @@ namespace RLTokenizer.Scopes
 {
     class VariableDefinitionContext : Context
     {
-        private Regex otherExitCharacters = null;
+        protected Regex otherExitCharacters = null;
 
-        private bool colonPresent = false;
+        protected bool colonPresent = false;
 
         public string Name { get => ((IdentifierContext)Children.First.Value     ).Identifier; }
         public string Type { get => ((IdentifierContext)Children.First.Next.Value).Identifier; }
@@ -39,7 +39,7 @@ namespace RLTokenizer.Scopes
 
             if (Children.Count == 0)
             {
-                if (token.IsLineOrWhitespace()) return (true, new IdentifierContext());
+                if (token.IsNewlineOrWhitespace()) return (true, new IdentifierContext());
                 if (previous.ToString().IsWhitespace()) 
                 {
                     if (!next.ToString().IsIdentifier())
@@ -56,7 +56,7 @@ namespace RLTokenizer.Scopes
                 throw new TokenizationException("No whitespace after var in variable declaration");
             }
 
-            if (token.IsLineOrWhitespace()) return (true, this);
+            if (token.IsNewline()) return (true, this);
 
             if (token == ":")
             {
@@ -68,10 +68,10 @@ namespace RLTokenizer.Scopes
 
             if (colonPresent) return (true, new IdentifierContext());
 
-
+            if (token.IsWhitespace()) throw new TokenizationException("Space found before : in variable declaration");
             throw new TokenizationException("Type identifier found before : in variable declaration");
         }
 
-        public override string ToString() => $"Variable Declaration (Name: {Name}, Type: {Type})";
+        public override string ToString() => $"Variable Declaration (Name: {Name}, Type: {Type}, Access: {AccessModifier})";
     }
 }

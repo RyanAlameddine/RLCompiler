@@ -23,9 +23,9 @@ namespace RLTokenizer.Scopes
                 return (true, Parent);
             }
 
-            if (token.IsLineOrWhitespace()) return (true, this);
+            if (token.IsNewlineOrWhitespace()) return (true, this);
 
-            if (next.ToString().IsLineOrWhitespace() || next == '.')
+            if (next.ToString().IsNewlineOrWhitespace() || next == '.')
             {
                 if (token.Length > 0 && token[0] == '.') token = token.Substring(1, token.Length - 1);
 

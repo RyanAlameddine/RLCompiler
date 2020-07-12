@@ -10,7 +10,7 @@ namespace RLTokenizer.Scopes
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
-            if (token.IsLineOrWhitespace()) return (true, this);
+            if (token.IsNewlineOrWhitespace()) return (true, this);
 
             if (!(token + next).IsIdentifier())
             {
