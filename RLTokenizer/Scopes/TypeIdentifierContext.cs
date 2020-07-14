@@ -6,7 +6,8 @@ namespace RLTokenizer.Scopes
 {
     class TypeIdentifierContext : IdentifierContext
     {
-        public bool isList = false;
+        public int ListCount { get; private set; } = 0;
+        private int listClosedCount = 0;
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
@@ -14,16 +15,18 @@ namespace RLTokenizer.Scopes
 
             if(token == "[")
             {
-                isList = true;
+                ListCount++;
                 return (true, this);
             }
             if(token[^1] == ']')
             {
-                if (isList)
+                listClosedCount++;
+                if (listClosedCount == ListCount)
                 {
-                    Identifier = token[0..^1];
+                    Identifier = token[0..^ListCount];
                     return (true, Parent);
                 }
+                if (listClosedCount > ListCount) throw new TokenizationException("Closing bracket found with no opening bracket in type declaration");
             }
 
             if (!(token + next).IsIdentifier() && next != ']')
@@ -39,6 +42,6 @@ namespace RLTokenizer.Scopes
             return (false, this);
         }
 
-        public override string ToString() => $"Type Identifier: {Identifier}" + (isList ? ", list" : "");
+        public override string ToString() => $"Type Identifier: {Identifier}" + (ListCount != 0 ? ", list*" + ListCount : "");
     }
 }

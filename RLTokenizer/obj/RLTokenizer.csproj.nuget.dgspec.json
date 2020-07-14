@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rhala\\Code\\SLCompiler\\RLTokenizer\\RLTokenizer.csproj": {}
+    "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLTokenizer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rhala\\Code\\SLCompiler\\RLTokenizer\\RLTokenizer.csproj": {
+    "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLTokenizer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rhala\\Code\\SLCompiler\\RLTokenizer\\RLTokenizer.csproj",
+        "projectUniqueName": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLTokenizer.csproj",
         "projectName": "RLTokenizer",
-        "projectPath": "C:\\Users\\rhala\\Code\\SLCompiler\\RLTokenizer\\RLTokenizer.csproj",
+        "projectPath": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLTokenizer.csproj",
         "packagesPath": "C:\\Users\\rhala\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rhala\\Code\\SLCompiler\\RLTokenizer\\obj\\",
+        "outputPath": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

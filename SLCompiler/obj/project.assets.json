@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rhala\\Code\\SLCompiler\\SLCompiler\\BasicTokenizer.csproj",
+      "projectUniqueName": "C:\\Users\\rhala\\Code\\RLCompiler\\SLCompiler\\BasicTokenizer.csproj",
       "projectName": "BasicTokenizer",
-      "projectPath": "C:\\Users\\rhala\\Code\\SLCompiler\\SLCompiler\\BasicTokenizer.csproj",
+      "projectPath": "C:\\Users\\rhala\\Code\\RLCompiler\\SLCompiler\\BasicTokenizer.csproj",
       "packagesPath": "C:\\Users\\rhala\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rhala\\Code\\SLCompiler\\SLCompiler\\obj\\",
+      "outputPath": "C:\\Users\\rhala\\Code\\RLCompiler\\SLCompiler\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

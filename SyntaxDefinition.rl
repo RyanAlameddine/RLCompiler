@@ -58,7 +58,7 @@ class Program
 		magicalDelegate ()
 	}
 
-	def Add :: a:int b:int c:int -> int
+	def Add :: a:int, b:int, c:int -> int
 	{
 		ret a + b + c
 	}
@@ -68,7 +68,7 @@ class Program
 
 
 
-(new file)
+#(new file)
 
 namespace Test
 
@@ -86,7 +86,7 @@ public:
 	{
 		if name == "stan"
 		{
-			throw (CodeNotCleanEnoughException "wow")
+			#throw (CodeNotCleanEnoughException "wow")
 		}
 		name -> n
 		5    -> x
@@ -109,7 +109,7 @@ private:
 
 		while i < list.Length
 		{
-			Console.WriteLine list[i]
+			Console.WriteLine (list.get i)
 			i + 1 -> i
 		}
 	}
@@ -117,9 +117,9 @@ private:
 	#this might need to be added later on
 	def evenMoreMagicalFunction
 	{
-		for val in [0..5]
-		{
-			Console.WriteLine val
-		}
+		#for val in [0..5]
+		#{
+		#	Console.WriteLine val
+		#}
 	}
 }

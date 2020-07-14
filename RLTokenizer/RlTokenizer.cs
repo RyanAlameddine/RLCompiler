@@ -24,19 +24,24 @@ namespace RLTokenizer
             {
                 char previous = i == 0 ? ' ' : codeSpan[i - 1];
                 char next = i + 1 == codeSpan.Length ? ' ' : codeSpan[i + 1];
+                string token = codeSpan.Slice(tokenStart, i - tokenStart + 1).ToString();
 
-                try
+
+                if (CommentCheck(token, ref reset))
                 {
-                    (reset, scope) = scope.Evaluate(previous, codeSpan.Slice(tokenStart, i - tokenStart + 1).ToString(), next);
-                }
-                catch (TokenizationException e)
-                {
-                    Console.WriteLine(e);
-                    Console.WriteLine("On line " + code.Take(i).Count(c => c == '\n') + 1);
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    return root;
+                    try
+                    {
+                        (reset, scope) = scope.Evaluate(previous, token, next);
+                    }
+                    catch (TokenizationException e)
+                    {
+                        Console.WriteLine(e);
+                        Console.WriteLine("On line " + (code.Take(i).Count(c => c == '\n') + 1));
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        return root;
+                    }
                 }
 
                 if (scope != previousScope && scope.Parent == null)
@@ -51,6 +56,20 @@ namespace RLTokenizer
 
             if (tokenStart < codeSpan.Length - 1 || scope != root) throw new TokenizationException("Invalid or incomplete namespace/class declaration");
             return root;
+        }
+
+        private static bool CommentCheck(string token, ref bool reset)
+        {
+            if(token[0] == '#')
+            {
+                reset = false;
+                if (token[^1] == '\n')
+                {
+                    reset = true;
+                }
+                return false;
+            }
+            return true;
         }
     }
 }

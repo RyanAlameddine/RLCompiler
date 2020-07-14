@@ -14,7 +14,10 @@ namespace RLTokenizer.Scopes
 
             if (token.IsNewlineOrWhitespace()) return (true, this);
 
-            if (token == "[") throw new NotImplementedException("Lists not yet implemented");
+            if (token == "[")
+            {
+                return (true, new ListDeclarationContext(true));
+            }
 
             //Identifier stage
             if (!(token + next).IsIdentifier())
@@ -35,6 +38,8 @@ namespace RLTokenizer.Scopes
             {
                 case "ret":
                     return new ReturnExpressionContext();
+                case "var":
+                    return new VariableDefinitionContext(AccessModifiers.Function);
                 case "if":
                 case "elif":
                 case "while":

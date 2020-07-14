@@ -5,6 +5,7 @@ namespace RLTokenizer.Scopes
     class VariableOrIdentifierDefinitionContext : VariableDefinitionContext
     {
         public bool IsVariable { get; private set; } = true;
+        public string Identifier { get; private set; }
 
         public VariableOrIdentifierDefinitionContext(AccessModifiers accessModifier) : base(accessModifier)
         {
@@ -19,6 +20,7 @@ namespace RLTokenizer.Scopes
             if(Children.Count == 1 && token.IsNewlineOrWhitespace())
             {
                 IsVariable = false;
+                Identifier = ((IdentifierContext)Children.First.Value).Identifier;
                 Children.Clear();
                 return (true, Parent);
             }
@@ -28,7 +30,7 @@ namespace RLTokenizer.Scopes
         public override string ToString()
         {
             if (IsVariable) return base.ToString();
-            return $"VIdentifier: {Name}";
+            return $"VIdentifier: {Identifier}";
         }
     
     }

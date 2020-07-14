@@ -20,7 +20,7 @@ namespace RLTokenizer
 
         private void ConsolePrint(int depth)
         {
-            for (int i = 0; i < depth; i++) Console.Write(' ');
+            for (int i = 0; i < depth; i++) Console.Write('|');
             Console.WriteLine(ToString());
             foreach(var child in Children)
             {

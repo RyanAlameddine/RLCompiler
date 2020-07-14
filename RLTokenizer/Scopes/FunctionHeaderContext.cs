@@ -30,7 +30,7 @@ namespace RLTokenizer.Scopes
                 var last = Children.Last.Previous.Value;
                 if(last is VariableOrIdentifierDefinitionContext c)
                 {
-                    if (!c.IsVariable) return c.Name;
+                    if (!c.IsVariable) return c.Identifier;
                     throw new TokenizationException("Return type is set to a variable declaration");
                 }
                 return ((IdentifierContext)last).Identifier;
