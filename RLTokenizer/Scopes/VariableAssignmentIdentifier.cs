@@ -1,4 +1,4 @@
-﻿namespace RLTokenizer.Scopes
+﻿namespace RLParser.Scopes
 {
     class VariableAssignmentIdentifier : IdentifierContext
     {
@@ -13,7 +13,7 @@
             if (token == "var")
             {
                 IsNewVariable = true;
-                return (true, new VariableDefinitionContext(AccessModifiers.Function));
+                return (true, new VariableDefinitionContext(AccessModifiers.Scope));
             }
 
             return base.Evaluate(previous, token, next);

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RLTokenizer
+namespace RLParser
 {
-    public static class RlTokenizer
+    public static class RLParser
     {
         public static Context Tokenize(string code)
         {
@@ -20,15 +20,20 @@ namespace RLTokenizer
             bool reset = true;
 
             int tokenStart = 0;
-            for(int i = 0; i < codeSpan.Length; i++)
+            int lineNumber = 1;
+            for (int i = 0; i < codeSpan.Length; i++)
             {
                 char previous = i == 0 ? ' ' : codeSpan[i - 1];
                 char next = i + 1 == codeSpan.Length ? ' ' : codeSpan[i + 1];
                 string token = codeSpan.Slice(tokenStart, i - tokenStart + 1).ToString();
 
-
+                if (codeSpan[i] == '\n')
+                {
+                    lineNumber++;
+                }
                 if (CommentCheck(token, ref reset))
                 {
+                    scope.RegisterNewCharReached(i, lineNumber);
                     try
                     {
                         (reset, scope) = scope.Evaluate(previous, token, next);
@@ -36,11 +41,17 @@ namespace RLTokenizer
                     catch (TokenizationException e)
                     {
                         Console.WriteLine(e);
-                        Console.WriteLine("On line " + (code.Take(i).Count(c => c == '\n') + 1));
+                        Console.WriteLine("On line " + lineNumber);
                         Console.WriteLine();
                         Console.WriteLine();
                         Console.WriteLine();
-                        return root;
+                        while (!codeSpan[i].ToString().IsNewline() || i == codeSpan.Length)
+                        {
+                            i++;
+                            if (i >= codeSpan.Length - 1) break;
+                        }
+                        scope = scope.Parent;
+                        tokenStart = i;
                     }
                 }
 
@@ -54,7 +65,14 @@ namespace RLTokenizer
                 if (reset) tokenStart = i + 1;
             }
 
-            if (tokenStart < codeSpan.Length - 1 || scope != root) throw new TokenizationException("Invalid or incomplete namespace/class declaration");
+            if (tokenStart < codeSpan.Length - 1 || scope != root)
+            {
+                Console.WriteLine(new TokenizationException("Invalid or incomplete namespace/class declaration"));
+                Console.WriteLine("On line " + lineNumber);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+            }
             return root;
         }
 

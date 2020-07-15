@@ -72,7 +72,7 @@ class Program
 
 namespace Test
 
-class Ball : Sprite
+class Ball: Sprite
 {
 
 private:
@@ -80,13 +80,13 @@ private:
 	var n:string
 	var x:int
 	
-public:
+internal:
 
-	def Ball :: name:string
+	def Ball :: name:string -> Ball
 	{
 		if name == "stan"
 		{
-			#throw (CodeNotCleanEnoughException "wow")
+			throw CodeNotCleanEnoughException "wow"
 		}
 		name -> n
 		5    -> x
@@ -117,9 +117,9 @@ private:
 	#this might need to be added later on
 	def evenMoreMagicalFunction
 	{
-		#for val in [0..5]
-		#{
-		#	Console.WriteLine val
-		#}
+		for val:int in [0..5]
+		{
+			Console.WriteLine val
+		}
 	}
 }

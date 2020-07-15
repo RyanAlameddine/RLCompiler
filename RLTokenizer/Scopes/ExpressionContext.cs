@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace RLTokenizer.Scopes
+namespace RLParser.Scopes
 {
     class ExpressionContext : Context
     {
@@ -35,6 +35,12 @@ namespace RLTokenizer.Scopes
             this.otherExitCharacters = otherExitCharacters;
         }
 
+        public ExpressionContext(Regex otherExitCharacters, bool Parenthesis)
+        {
+            this.otherExitCharacters = otherExitCharacters;
+            this.Parenthesis = Parenthesis;
+        }
+
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
             if (token.IsNewline() || (otherExitCharacters != null && otherExitCharacters.IsMatch(token)))
@@ -48,31 +54,33 @@ namespace RLTokenizer.Scopes
 
             if (token == "->")
             {
-                if (Parent is ExpressionContext)
-                {
-                    throw new TokenizationException("Incomplete expression statement");
-                }
-                return (true, new VariableAssignmentIdentifier());
+                Context ret = this;
+                while (ret.Parent is ExpressionContext) ret = ret.Parent;
+
+                var newParent = new ExpressionContext(otherExitCharacters, Parenthesis);
+                ret.Parent.Children.RemoveLast();
+                ret.Parent.Children.AddLast(newParent);
+                newParent.Parent = ret.Parent;
+
+                ret.Parent = newParent;
+                newParent.Children.AddLast(ret);
+
+                return (true, newParent.RegisterChild(new VariableAssignmentIdentifier()));
             }
 
-            return CheckExpressions(previous, token, next, this, Parenthesis, otherExitCharacters);
-        }
-
-        public static (bool, Context) CheckExpressions(char previous, string token, char next, Context context, bool parenthesis, Regex otherExitCharacters)
-        {
             if (token[0] == '"')
             {
                 if (token[^1] == '"' && token.Length != 1)
                 {
                     var child = new StringLiteral(token);
-                    child.Parent = context;
-                    context.Children.AddLast(child);
-                    return (true, context);
+                    child.Parent = this;
+                    Children.AddLast(child);
+                    return (true, this);
                 }
-                return (false, context);
+                return (false, this);
             }
 
-            if (token.IsWhitespace()) return (true, context);
+            if (token.IsWhitespace()) return (true, this);
 
             if (token.IsIdentifier())
             {
@@ -81,12 +89,31 @@ namespace RLTokenizer.Scopes
                     var child = new IdentifierContext
                     {
                         Identifier = token,
-                        Parent = context
+                        Parent = this
                     };
-                    context.Children.AddLast(child);
-                    return (true, context);
+                    if (!IsFunctionCall
+                        && Children.Count == 2
+                        && (Children.First.Next.Value is OperatorIdentifierContext o)
+                        && o.Identifier.IsEndOperator())
+                    {
+                        var newParent = new ExpressionContext(otherExitCharacters, Parenthesis);
+                        newParent.Parenthesis = Parenthesis;
+
+                        Parent.Children.RemoveLast();
+                        Parent.Children.AddLast(newParent);
+
+                        newParent.Children.AddLast(this);
+                        newParent.Parent = Parent;
+                        Parent = newParent;
+
+                        Children.AddLast(child);
+
+                        return (true, newParent);
+                    }
+                    RegisterChild(new ExpressionContext().RegisterChild(child));
+                    return (true, this);
                 }
-                return (false, context);
+                return (false, this);
             }
 
             if (token.IsOperator())
@@ -96,31 +123,41 @@ namespace RLTokenizer.Scopes
                     var operatorChild = new OperatorIdentifierContext
                     {
                         Identifier = token,
-                        Parent = context
+                        Parent = this
                     };
-                    if (token.IsSOperator())
+                    if (token.IsSpltOperator())
                     {
-                        var newParent = new ExpressionContext(otherExitCharacters);
-                        newParent.Parenthesis = parenthesis;
+                        var topParent = Parent;
+                        while (topParent is ExpressionContext) topParent = topParent.Parent;
 
-                        context.Parent.Children.RemoveLast();
-                        context.Parent.Children.AddLast(newParent);
+                        var oldTop = topParent.Children.Last.Value;
+                        var newTop = new ExpressionContext(otherExitCharacters, Parenthesis);
+                        topParent.Children.RemoveLast();
+                        topParent.Children.AddLast(newTop);
+                        newTop.Parent = topParent;
 
-                        newParent.Children.AddLast(context);
-                        newParent.Parent = context.Parent;
-                        context.Parent = newParent;
+                        newTop.Children.AddLast(oldTop);
+                        oldTop.Parent = newTop;
 
-                        newParent.Children.AddLast(operatorChild);
+                        newTop.Children.AddLast(operatorChild);
 
-                        var newChild = new ExpressionContext(otherExitCharacters);
-                        newChild.Parent = newParent;
-                        newParent.Children.AddLast(newChild);
+                        var newChild = new ExpressionContext(otherExitCharacters, Parenthesis);
+
+                        newTop.Children.AddLast(newChild);
+                        newChild.Parent = newTop;
+
                         return (true, newChild);
                     }
-                    context.Children.AddLast(operatorChild);
-                    return (true, new ExpressionContext());
+
+                    Children.AddLast(operatorChild);
+
+                    if (token.IsEndOperator())
+                    {
+                        return (true, this);
+                    }
+                    return (true, RegisterChild(new ExpressionContext(otherExitCharacters, Parenthesis)));
                 }
-                return (false, context);
+                return (false, this);
             }
 
             if (token.IsNumber())
@@ -128,36 +165,45 @@ namespace RLTokenizer.Scopes
                 if (!(token + next).IsNumber())
                 {
                     var child = new IntLiteral(int.Parse(token));
-                    child.Parent = context;
-                    context.Children.AddLast(child);
-                    return (true, context);
+                    child.Parent = this;
+                    this.Children.AddLast(child);
+                    return (true, this);
                 }
-                return (false, context);
+                return (false, this);
             }
 
             if (token == "(")
             {
-                var child = new ExpressionContext();
-                child.Parenthesis = true;
+                var child = RegisterChild(new ExpressionContext(null, true));
                 return (true, child);
             }
 
             if (token == ")")
             {
-                if (parenthesis) return (true, context.Parent);
+                if (Parenthesis) return (true, Parent);
                 throw new TokenizationException("Closing parenthesis found without open parenthesis");
             }
 
-            if(token == ".")
+            if (token == ".")
             {
+                if (next == '.') return (false, this);
                 var child = new Dot();
-                child.Parent = context;
-                context.Children.AddLast(child);
-                return (true, context);
+                child.Parent = this;
+                Children.AddLast(child);
+                return (true, this);
+            }
+            if(token == "..")
+            {
+                var dotdot = RegisterChild(new OperatorIdentifierContext());
+                dotdot.Identifier = token;
+                return (true, this);
             }
 
             //TODO fix this
-            if (token == "[") return (true, new ListDeclarationContext(false));
+            if (token == "[")
+            {
+                return (true, RegisterChild(new ListDeclarationContext(false)));
+            }
 
             throw new TokenizationException("Unknown character found in statment");
         }

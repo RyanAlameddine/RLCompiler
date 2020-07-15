@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace RLTokenizer
+namespace RLParser
 {
     [Serializable]
     internal class TokenizationException : Exception

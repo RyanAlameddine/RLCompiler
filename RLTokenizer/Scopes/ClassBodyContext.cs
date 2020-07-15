@@ -1,4 +1,4 @@
-﻿namespace RLTokenizer.Scopes
+﻿namespace RLParser.Scopes
 {
     class ClassBodyContext : Context
     {
@@ -20,6 +20,11 @@
                     accessModifier = AccessModifiers.Private;
                     return (true, this);
                 }
+                else if (token == "internal:")
+                {
+                    accessModifier = AccessModifiers.Internal;
+                    return (true, this);
+                }
                 else if (token == "var") return (true, new VariableDefinitionContext(accessModifier));
                 else if (token == "def") return (true, new FunctionHeaderContext(accessModifier));
             }
@@ -37,6 +42,7 @@
     {
         Public,
         Private,
-        Function,
+        Internal,
+        Scope,
     }
 }

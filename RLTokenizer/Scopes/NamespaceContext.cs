@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RLTokenizer.Scopes
+namespace RLParser.Scopes
 {
     /// <summary>
     /// Small scope in the namespace declaration

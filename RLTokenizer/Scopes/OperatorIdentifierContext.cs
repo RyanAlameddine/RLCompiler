@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RLTokenizer.Scopes
+namespace RLParser.Scopes
 {
     class OperatorIdentifierContext : IdentifierContext
     {

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace RLTokenizer.Scopes
+namespace RLParser.Scopes
 {
     class ListDeclarationContext : Context
     {
         private bool commaPresent = true;
         private LinkedListNode<Context> lastPackaged = null;
         private readonly bool packageOnExit;
+        private bool expressionComplete = false;
 
         public ListDeclarationContext(bool packageOnExit)
         {
@@ -17,45 +18,66 @@ namespace RLTokenizer.Scopes
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
-            if (token == "]")
+            if (expressionComplete)
             {
-                if(Children.Count != 0) PackageChildren();
-                if (!packageOnExit)
+                if (previous == ',') { }
+                else if(previous == ']')
                 {
-                    if (Parent is ListDeclarationContext) return (true, Parent);
-                    return (true, Parent.Parent);
+                    return Parent.Evaluate(previous, token, next);
                 }
-                return PackageToParent();
-            }
-            if (token.IsNewlineOrWhitespace()) return (true, this);
-
-            if(token == ",")
-            {
-                if (commaPresent) throw new TokenizationException("Two commas found in a row in list declaration");
-                if (Children.Count == 0) throw new TokenizationException("No items found before comma");
-                commaPresent = true;
-
-                PackageChildren();
-
-                return (true, this);
+                else
+                {
+                    throw new TokenizationException("List declaration incomplete");
+                }
             }
 
-            if (token == "." && next == '.') return (false, this);
-            if(token == "..")
-            {
-                PackageChildren();
-                var newChild = new OperatorIdentifierContext();
-                newChild.Identifier = token;
-                newChild.Parent = this;
-                Children.AddLast(newChild);
+            //if (token == "]")
+            //{
+            //    if(Children.Count != 0) PackageChildren();
+            //    if (!packageOnExit)
+            //    {
+            //        if (Parent is ListDeclarationContext) return (true, Parent);
+            //        return (true, Parent.Parent);
+            //    }
+            //    return PackageToParent();
+            //}
+            //if (token.IsNewlineOrWhitespace()) return (true, this);
 
-                lastPackaged = lastPackaged.Next;
-                return (true, this);
-            }
+            //if(token == ",")
+            //{
+            //    if (commaPresent) throw new TokenizationException("Two commas found in a row in list declaration");
+            //    if (Children.Count == 0) throw new TokenizationException("No items found before comma");
+            //    commaPresent = true;
 
-            commaPresent = false;
+            //    PackageChildren();
 
-            return ExpressionContext.CheckExpressions(previous, token, next, this, false, null);
+            //    return (true, this);
+            //}
+
+            //if (token == "." && next == '.') return (false, this);
+            //if(token == "..")
+            //{
+            //    PackageChildren();
+            //    var newChild = new OperatorIdentifierContext();
+            //    newChild.Identifier = token;
+            //    newChild.Parent = this;
+            //    Children.AddLast(newChild);
+
+            //    lastPackaged = lastPackaged.Next;
+            //    return (true, this);
+            //}
+
+            //commaPresent = false;
+
+            expressionComplete = true;
+
+            var newExpression = new ExpressionContext(new Regex("^(\\]|,)$"));
+            newExpression.Parent = this;
+            Children.AddLast(newExpression);
+            
+            return newExpression.Evaluate(previous, token, next);
+            
+            //return ExpressionContext.CheckExpressions(previous, token, next, this, false, new Regex("^\\]$"));
         }
 
         private void PackageChildren()

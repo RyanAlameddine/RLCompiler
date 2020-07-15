@@ -1,4 +1,4 @@
-﻿namespace RLTokenizer
+﻿namespace RLParser
 {
     internal class Dot : Context
     {

@@ -1,10 +1,10 @@
-﻿using RLTokenizer.Scopes;
+﻿using RLParser.Scopes;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace RLTokenizer
+namespace RLParser
 {
     class FileContext : Context
     {

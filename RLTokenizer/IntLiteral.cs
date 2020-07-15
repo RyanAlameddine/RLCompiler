@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RLTokenizer
+namespace RLParser
 {
     class IntLiteral : Context
     {

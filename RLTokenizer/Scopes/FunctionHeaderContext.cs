@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace RLTokenizer.Scopes
+namespace RLParser.Scopes
 {
     class FunctionHeaderContext : Context
     {
@@ -69,7 +69,7 @@ namespace RLTokenizer.Scopes
                 }
                 if(previous == ',')
                 {
-                    return (true, new VariableDefinitionContext(AccessModifiers.Function, ","));
+                    return (true, new VariableDefinitionContext(AccessModifiers.Scope, ","));
                 }
                 if (token.IsWhitespace()) return (true, this);
                 throw new TokenizationException("Comma not found after function parameter declaration");
@@ -93,7 +93,7 @@ namespace RLTokenizer.Scopes
                 if (token == "::")
                 {
                     colonPresent = true;
-                    return (true, new VariableOrIdentifierDefinitionContext(AccessModifiers.Function, ","));
+                    return (true, new VariableOrIdentifierDefinitionContext(AccessModifiers.Scope, ","));
                 }
                 throw new TokenizationException("No :: found after function declaration");
             }

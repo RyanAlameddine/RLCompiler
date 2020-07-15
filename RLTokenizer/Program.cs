@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 
-namespace RLTokenizer
+namespace RLParser
 {
     class Program
     {
@@ -21,7 +21,7 @@ namespace RLTokenizer
                 string code = File.ReadAllText(path);
                 Console.Clear();
 
-                Context program = RlTokenizer.Tokenize(code);
+                Context program = RLParser.Tokenize(code);
                 program.ConsolePrint();
 
                 if (Console.KeyAvailable)

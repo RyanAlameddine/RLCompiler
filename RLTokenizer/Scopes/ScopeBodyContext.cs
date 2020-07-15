@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RLTokenizer.Scopes
+namespace RLParser.Scopes
 {
     class ScopeBodyContext : Context
     {
@@ -16,7 +16,23 @@ namespace RLTokenizer.Scopes
 
             if (token == "[")
             {
-                return (true, new ListDeclarationContext(true));
+                var newExpression = RegisterChild(new ExpressionContext());
+                
+                return (true, newExpression.RegisterChild(new ListDeclarationContext(true)));
+            }
+
+            if (!(token + next).IsNumber())
+            {
+                if (token.IsNumber())
+                {
+                    var newChild = new ExpressionContext();
+                    newChild.RegisterChild(new IntLiteral(int.Parse(token)));
+                    return (true, RegisterChild(newChild));
+                }
+            }
+            if (token.IsNumber())
+            {
+                return (false, this);
             }
 
             //Identifier stage
@@ -37,15 +53,17 @@ namespace RLTokenizer.Scopes
             switch (token)
             {
                 case "ret":
-                    return new ReturnExpressionContext();
+                    return new ReturnContext();
                 case "var":
-                    return new VariableDefinitionContext(AccessModifiers.Function);
+                    return new VariableDefinitionContext(AccessModifiers.Scope);
                 case "if":
                 case "elif":
                 case "while":
                     return new ConditionalExpressionContext(token, true);
                 case "else":
                     return new ConditionalExpressionContext(token, false);
+                case "for":
+                    return new ForLoopContext();
             }
             return new ExpressionContext(token);
 

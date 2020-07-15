@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLTokenizer.csproj",
-      "projectName": "RLTokenizer",
-      "projectPath": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLTokenizer.csproj",
+      "projectUniqueName": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLParser.csproj",
+      "projectName": "RLParser",
+      "projectPath": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\RLParser.csproj",
       "packagesPath": "C:\\Users\\rhala\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\rhala\\Code\\RLCompiler\\RLTokenizer\\obj\\",
       "projectStyle": "PackageReference",
