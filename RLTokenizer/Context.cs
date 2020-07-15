@@ -21,6 +21,8 @@ namespace RLParser
         public T RegisterChild<T>(T context) where T : Context
         {
             context.Parent = this;
+            context.Lines = Lines;
+            context.Characters = Characters;
             this.Children.AddLast(context);
 
             return context;

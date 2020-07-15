@@ -10,6 +10,8 @@ namespace RLParser.Scopes
         private LinkedListNode<Context> lastPackaged = null;
         private readonly bool packageOnExit;
         private bool expressionComplete = false;
+        private bool forStatement = false;
+        public bool IsListComprehension { get; private set; } = false;
 
         public ListDeclarationContext(bool packageOnExit)
         {
@@ -18,12 +20,46 @@ namespace RLParser.Scopes
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
+            if (IsListComprehension)
+            {
+                if (previous == ']')
+                {
+                    if (Children.Count < 3) throw new TokenizationException("Incomplete list comprenehsion");
+                    return Parent.Evaluate(previous, token, next);
+                }
+                if (forStatement)
+                {
+                    if (token.IsWhitespace()) return (true, this);
+                    if (token == "i") return (false, this);
+                    forStatement = false;
+                    if (token == "in") return (true, RegisterChild(new ExpressionContext(new Regex("^if$"))));
+                    
+                    throw new TokenizationException("Unexpected character found instead of \"in\" in list comprehension");
+                }
+
+                if (previous == 'f')
+                    return RegisterChild(new ConditionalExpressionContext
+                        ("if", true, new Regex("^\\]$"))).Evaluate(previous, token, next);
+
+                if (token.IsWhitespace()) return (true, this);
+
+                throw new TokenizationException("Incomplete list comprenehsion");
+            }
+
             if (expressionComplete)
             {
+                expressionComplete = false;
                 if (previous == ',') { }
                 else if(previous == ']')
                 {
                     return Parent.Evaluate(previous, token, next);
+                }
+                else if(previous == 'r')
+                {
+                    IsListComprehension = true;
+                    forStatement = true;
+                    if (!token.IsWhitespace()) throw new TokenizationException("No space found after for in list comprehension");
+                    return (true, RegisterChild(new IdentifierContext()));
                 }
                 else
                 {
@@ -71,7 +107,7 @@ namespace RLParser.Scopes
 
             expressionComplete = true;
 
-            var newExpression = new ExpressionContext(new Regex("^(\\]|,)$"));
+            var newExpression = new ExpressionContext(new Regex("^(\\]|,|for)$"));
             newExpression.Parent = this;
             Children.AddLast(newExpression);
             
@@ -119,6 +155,6 @@ namespace RLParser.Scopes
             return (true, Parent);
         }
 
-        public override string ToString() => "List Declaration";
+        public override string ToString() => IsListComprehension ? "List Comprehension" : "List Declaration";
     }
 }

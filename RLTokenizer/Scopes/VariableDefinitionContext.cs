@@ -29,6 +29,7 @@ namespace RLParser.Scopes
             if (token.IsNewline() || otherExitCharacters != null && otherExitCharacters.IsMatch(token))
             {
                 if (Children.Count != 2) throw new TokenizationException("Incomplete variable declaration");
+                if (token.IsNewline()) return Parent.Evaluate(previous, token, next);
                 return (true, Parent);
             }
 

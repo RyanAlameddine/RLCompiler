@@ -8,7 +8,7 @@ namespace RLParser.Scopes
 {
     class ExpressionContext : Context
     {
-        private Regex otherExitCharacters;
+        protected Regex otherExitCharacters;
 
         public bool Parenthesis { private get; set; } = false;
 
@@ -73,6 +73,10 @@ namespace RLParser.Scopes
                 if (token[^1] == '"' && token.Length != 1)
                 {
                     var child = new StringLiteral(token);
+
+                    var e = CheckEndOp(child);
+                    if (e != default) return e;
+
                     child.Parent = this;
                     Children.AddLast(child);
                     return (true, this);
@@ -91,26 +95,26 @@ namespace RLParser.Scopes
                         Identifier = token,
                         Parent = this
                     };
-                    if (!IsFunctionCall
-                        && Children.Count == 2
-                        && (Children.First.Next.Value is OperatorIdentifierContext o)
-                        && o.Identifier.IsEndOperator())
-                    {
-                        var newParent = new ExpressionContext(otherExitCharacters, Parenthesis);
-                        newParent.Parenthesis = Parenthesis;
+                    var e = CheckEndOp(child);
+                    if (e != default) return e;
 
-                        Parent.Children.RemoveLast();
-                        Parent.Children.AddLast(newParent);
-
-                        newParent.Children.AddLast(this);
-                        newParent.Parent = Parent;
-                        Parent = newParent;
-
-                        Children.AddLast(child);
-
-                        return (true, newParent);
-                    }
                     RegisterChild(new ExpressionContext().RegisterChild(child));
+                    return (true, this);
+                }
+                return (false, this);
+            }
+
+            if (token.IsNumber())
+            {
+                if (!(token + next).IsNumber())
+                {
+                    var child = new IntLiteral(int.Parse(token));
+
+                    var e = CheckEndOp(child);
+                    if (e != default) return e;
+
+                    child.Parent = this;
+                    this.Children.AddLast(child);
                     return (true, this);
                 }
                 return (false, this);
@@ -128,7 +132,7 @@ namespace RLParser.Scopes
                     if (token.IsSpltOperator())
                     {
                         var topParent = Parent;
-                        while (topParent is ExpressionContext) topParent = topParent.Parent;
+                        while (topParent.GetType() == typeof(ExpressionContext)) topParent = topParent.Parent;
 
                         var oldTop = topParent.Children.Last.Value;
                         var newTop = new ExpressionContext(otherExitCharacters, Parenthesis);
@@ -156,18 +160,6 @@ namespace RLParser.Scopes
                         return (true, this);
                     }
                     return (true, RegisterChild(new ExpressionContext(otherExitCharacters, Parenthesis)));
-                }
-                return (false, this);
-            }
-
-            if (token.IsNumber())
-            {
-                if (!(token + next).IsNumber())
-                {
-                    var child = new IntLiteral(int.Parse(token));
-                    child.Parent = this;
-                    this.Children.AddLast(child);
-                    return (true, this);
                 }
                 return (false, this);
             }
@@ -206,6 +198,30 @@ namespace RLParser.Scopes
             }
 
             throw new TokenizationException("Unknown character found in statment");
+        }
+
+        private (bool, Context) CheckEndOp(Context child)
+        {
+            if (!IsFunctionCall
+                        && Children.Count == 2
+                        && (Children.First.Next.Value is OperatorIdentifierContext o)
+                        && o.Identifier.IsEndOperator())
+            {
+                var newParent = new ExpressionContext(otherExitCharacters, Parenthesis);
+                newParent.Parenthesis = Parenthesis;
+
+                Parent.Children.RemoveLast();
+                Parent.Children.AddLast(newParent);
+
+                newParent.Children.AddLast(this);
+                newParent.Parent = Parent;
+                Parent = newParent;
+
+                Children.AddLast(child);
+
+                return (true, newParent);
+            }
+            return default;
         }
 
         public override string ToString() 

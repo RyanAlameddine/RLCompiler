@@ -2,31 +2,13 @@ namespace System.Test
 
 class Program
 {
-public:
-	var wow:[int]
-	var coolInt:int
-	var coolObject:Ball
-
-	def Magic :: a:int -> bool
+	def Func 
 	{
-		Add a a (Add 2 3 a) -> coolInt
-		ret (coolInt + 5) == 3
+		[x * 4 + 2 for x in [1..3] if x > 2] -> var list:[int]
+
+		#if x > 2
+		#{
+		#	true -> false
+		#}
 	}
-
-private:
-	def Add :: a:int, b:int, c:int -> int
-	{
-		wow - 1 -> wow
-
-		ret a + b / c
-	}
-
-	def Test :: int:a, int:b -> void
-	{
-		else
-		{
-			a + b -> a
-		}
-	}
-
 }

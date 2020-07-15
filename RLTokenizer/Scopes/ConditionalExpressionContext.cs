@@ -2,43 +2,30 @@
 
 namespace RLParser.Scopes
 {
-    internal class ConditionalExpressionContext : Context
+    internal class ConditionalExpressionContext : ExpressionContext
     {
         private readonly bool hasCondition;
         private bool scopeComplete;
 
         public string Statement { get; }
 
-        public ConditionalExpressionContext(string statement, bool hasCondition)
+        public ConditionalExpressionContext(string statement, bool hasCondition, Regex otherExitCharacters = null)
+            :base(otherExitCharacters)
         {
             this.hasCondition = hasCondition;
             Statement = statement;
+            this.otherExitCharacters = otherExitCharacters;
         }
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
-            if (scopeComplete)
+            if (scopeComplete || (otherExitCharacters != null && otherExitCharacters.IsMatch(token)))
             {
-                return (true, Parent);
+                return Parent.Evaluate(previous, token, next);
             }
 
-            if (hasCondition)
-            {
-                if(Children.Count == 0)
-                {
-                    if (!token.IsWhitespace()) throw new TokenizationException("No whitespace after if statement");
-                    return (true, new ExpressionContext(new Regex("^{$")));
-                }
-            }
-
-            if(token == "{")
-            {
-                scopeComplete = true;
-                return (true, new ScopeBodyContext());
-            }
-            if (!token.IsNewlineOrWhitespace()) throw new TokenizationException($"No whitespace after {Statement} statement");
-            return (true, this);
-            
+            if (!token.IsWhitespace()) throw new TokenizationException($"No whitespace after {Statement} statement");
+            return RegisterChild(new ExpressionContext(otherExitCharacters)).Evaluate(previous, token, next);
         }
 
         public override string ToString() => $"{Statement} statement header";
