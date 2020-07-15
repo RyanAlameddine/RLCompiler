@@ -4,8 +4,6 @@ Tokenizer, Parser, and Compiler for RLang, a strongly typed OO language compiled
 # Rules
  
  Strongly typed, OOP, compiled to CIL
-* int [alias for BCL type System.Int32]
-* void [alias for BCL type System.Void]
  #
  
 * Case sensitive
