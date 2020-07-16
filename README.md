@@ -1,5 +1,5 @@
 # RLCompiler
-Tokenizer, Parser, and Compiler for RLang, a strongly typed OO language compiled to CIL created by me
+Tokenizer, Parser, and Compiler for rLang, a strongly typed OO language compiled to CIL created by me.
 
 # Rules
  
@@ -28,3 +28,11 @@ Tokenizer, Parser, and Compiler for RLang, a strongly typed OO language compiled
 * String Literals: \".*?\"
 * Int Literals: [0-9]+
 * Identifiers: [a-zA-Z_]\w*
+
+# VSCode
+
+Also contains a vscode extension (found in the /rlang directory) which adds the following features:
+
+ * comments
+ * auto-closing pairs: (), [], {}, "", ''
+ * syntax highlighting
