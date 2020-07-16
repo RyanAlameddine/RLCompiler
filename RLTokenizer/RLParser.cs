@@ -7,7 +7,7 @@ namespace RLParser
 {
     public static class RLParser
     {
-        public static Context Tokenize(string code)
+        public static Context Parse(string code)
         {
             Context root = new FileContext();
 

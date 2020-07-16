@@ -21,7 +21,7 @@ namespace RLParser
                 string code = File.ReadAllText(path);
                 Console.Clear();
 
-                Context program = RLParser.Tokenize(code);
+                Context program = RLParser.Parse(code);
                 program.ConsolePrint();
 
                 if (Console.KeyAvailable)
