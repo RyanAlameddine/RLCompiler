@@ -27,7 +27,12 @@ class Program
 	def Add :: a:int, b:int, c:int -> int
 	{
 		#ret (a + (b + ((b * c) * c)))
-		ret a + b / c * d != a + b - b
+		
+		
+		ret ((a + b / c * d ) != (a + b - b))
+		
+		
+		
 		#ret ((a + (((b / c) * d)) != a + (b - b)))
 		#ret (a + ((b * c) * d) + (b + b))
 	}

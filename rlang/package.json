@@ -1,0 +1,25 @@
+{
+    "name": "rlang",
+    "displayName": "rLang Language Support",
+    "description": "Adds support for the rLang programming language created by Github User RyanAlameddine",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.47.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "rlang",
+            "aliases": ["rLang", "rlang"],
+            "extensions": [".rl"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "rlang",
+            "scopeName": "source.rl",
+            "path": "./syntaxes/rlang.tmLanguage.json"
+        }]
+    }
+}
