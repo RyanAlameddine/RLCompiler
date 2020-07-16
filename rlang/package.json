@@ -1,7 +1,8 @@
 {
     "name": "rlang",
     "displayName": "rLang Language Support",
-    "description": "Adds support for the rLang programming language created by Github User RyanAlameddine",
+    "description": "Adds language support for the rLang programming language created by Github User RyanAlameddine",
+    "publisher": "rhalameddine",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.47.0"
