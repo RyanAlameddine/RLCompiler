@@ -72,7 +72,7 @@ class Program
 
 namespace Test
 
-class Ball: Sprite
+class Ball:Sprite
 {
 
 private:

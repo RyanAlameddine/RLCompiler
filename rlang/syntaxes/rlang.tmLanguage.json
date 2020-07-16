@@ -7,13 +7,31 @@
 		},
 		{
 			"include": "#strings"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#comments"
 		}
 	],
 	"repository": {
+		"operators": {
+			"patterns": [{
+				"name": "keyword.other.rlang",
+				"match": "(\\*|\\+|\\-|!|!=|/|=|==|\\||\\|\\||&|&&|:|\\<|\\>|\\>=|\\<=|\\(|\\)|,|\\.|\\[|\\])"
+			}]
+		},
 		"keywords": {
 			"patterns": [{
-				"name": "keyword.control.rlang",
-				"match": "\\b(if|while|for|return)\\b"
+				"name": "keyword.rlang",
+				"match": "\\b(new|if|elif|else|while|for|public|private|internal|ret|in|namespace|class|def|var)\\b"
 			}]
 		},
 		"strings": {
@@ -26,6 +44,19 @@
 					"match": "\\\\."
 				}
 			]
+		},
+		"types": {
+			"name": "entity.name.type.rlang",
+			"match": "(((?<!::)(?<=:)|(?<=class)) *\\b[a-zA-Z_][a-zA-Z]*\\b|(?<=::)(?<=:) *\\b[a-zA-Z_][a-zA-Z]*\\b *$)"
+		},
+		"functions": {
+			"name": "entity.name.function.rlang",
+			"match": ""
+		},
+		"comments": {
+			"name": "comment.line.number-sign.rlang",
+			"begin": "#",
+			"end": "\n"
 		}
 	},
 	"scopeName": "source.rl"
