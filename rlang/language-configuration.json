@@ -34,7 +34,7 @@
         }
     },
     "indentationRules": {
-        "increaseIndentPattern": "^((?!\\/\\/).)*(\\{[^}\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$",
+        "increaseIndentPattern": "(^((?!#).)*(\\{[^}\"'`]*|\\[[^\\]\"'`]*)$|^(public:|internal:|private:).*$)",
         "decreaseIndentPattern": "^((?!.*?\\/\\*).*\\*/)?\\s*[\\}\\]].*$"
       }
 }
