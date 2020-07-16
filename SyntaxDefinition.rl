@@ -99,7 +99,7 @@ internal:
 
 private:
 
-	def magicalFunction :: void
+	def magicalFunction :: void#hi there
 	{
 		var array:[int]
 		[1, 3, 4] -> array

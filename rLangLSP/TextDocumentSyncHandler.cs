@@ -16,7 +16,7 @@ namespace rLangLSP
     class TextDocumentSyncHandler : ITextDocumentSyncHandler
     {
         private readonly ILanguageServer _router;
-        //private readonly BufferManager _bufferManager;
+        private readonly BufferManager _bufferManager;
 
         private readonly DocumentSelector _documentSelector = new DocumentSelector(
             new DocumentFilter()
@@ -27,10 +27,10 @@ namespace rLangLSP
 
         private SynchronizationCapability _capability;
 
-        public TextDocumentSyncHandler(ILanguageServer router/*, BufferManager bufferManager*/)
+        public TextDocumentSyncHandler(ILanguageServer router, BufferManager bufferManager)
         {
             _router = router;
-            //_bufferManager = bufferManager;
+            _bufferManager = bufferManager;
         }
 
         public TextDocumentSyncKind Change { get; } = TextDocumentSyncKind.Full;
@@ -44,57 +44,57 @@ namespace rLangLSP
             };
         }
 
-        public TextDocumentAttributes GetTextDocumentAttributes(Uri uri)
+        public TextDocumentAttributes GetTextDocumentAttributes(DocumentUri uri)
         {
             return new TextDocumentAttributes(uri, "rlang");
         }
 
-        public TextDocumentAttributes GetTextDocumentAttributes(DocumentUri uri)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Unit> Handle(DidChangeTextDocumentParams request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DidChangeTextDocumentParams request, CancellationToken cancellationToken)
         {
             var documentPath = request.TextDocument.Uri.ToString();
             var text = request.ContentChanges.FirstOrDefault()?.Text;
 
-            //_bufferManager.UpdateBuffer(documentPath, new StringBuffer(text));
-
-            _router.Window.LogInfo($"Updated buffer for document: {documentPath}\n{text}");
-
-            return Unit.Task;
+            await Task.Run(() => _bufferManager.UpdateText(documentPath, text));
+// _router.Window.LogInfo($"Updated buffer for document: {documentPath}\n{text}");
+            return Unit.Value;
         }
 
-        public Task<Unit> Handle(DidOpenTextDocumentParams request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DidOpenTextDocumentParams request, CancellationToken cancellationToken)
         {
-            //_bufferManager.UpdateBuffer(request.TextDocument.Uri.ToString(), new StringBuffer(request.TextDocument.Text));
-            return Unit.Task;
+            var documentPath = request.TextDocument.Uri.ToString();
+            var text = request.TextDocument.Text;
+
+            await Task.Run(() => _bufferManager.UpdateText(documentPath, text));
+            //_router.Window.LogInfo($"opened buffer for document: {documentPath}\n{text}");
+            return Unit.Value;
         }
 
         public Task<Unit> Handle(DidCloseTextDocumentParams request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Unit.Task;
         }
 
         public Task<Unit> Handle(DidSaveTextDocumentParams request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Unit.Task;
         }
 
         public void SetCapability(SynchronizationCapability capability)
         {
-            throw new NotImplementedException();
+            this._capability = capability;
+            //throw new NotImplementedException();
         }
 
         TextDocumentRegistrationOptions IRegistration<TextDocumentRegistrationOptions>.GetRegistrationOptions()
         {
-            throw new NotImplementedException();
+            return new TextDocumentRegistrationOptions();
+            //throw new NotImplementedException();
         }
 
         TextDocumentSaveRegistrationOptions IRegistration<TextDocumentSaveRegistrationOptions>.GetRegistrationOptions()
         {
-            throw new NotImplementedException();
+            return new TextDocumentSaveRegistrationOptions();
+            //throw new NotImplementedException();
         }
     }
 }

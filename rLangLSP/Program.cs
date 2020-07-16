@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using OmniSharp.Extensions.LanguageServer.Server;
 using System;
 using System.Threading.Tasks;
@@ -15,16 +16,17 @@ namespace rLangLSP
                     .WithOutput(Console.OpenStandardOutput())
                     .WithLoggerFactory(new LoggerFactory())
                     .AddDefaultLoggingProvider()
-                    //.WithServices(ConfigureServices)
+                    .WithServices(ConfigureServices)
                     .WithHandler<TextDocumentSyncHandler>()
+                    .WithHandler<DocumentHighlightHandler>()
                  );
 
             await server.WaitForExit;
         }
 
-        //static void ConfigureServices(IServiceCollection services)
-        //{
-        //    services.AddSingleton<BufferManager>();
-        //}
+        static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<BufferManager>();
+        }
     }
 }

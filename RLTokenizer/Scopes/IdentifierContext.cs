@@ -6,7 +6,19 @@ namespace RLParser.Scopes
 {
     class IdentifierContext : Context
     {
-        public string Identifier { get; set; }
+        private string identifier = null;
+        public string Identifier 
+        { 
+            get
+            {
+                return identifier;
+            }
+            set
+            {
+                if (identifier != null && identifier.IsKeyword()) throw new TokenizationException("Identifier is a keyword");
+                identifier = value;
+            }
+        }
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
