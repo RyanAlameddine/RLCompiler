@@ -153,6 +153,11 @@ namespace RLParser.Scopes
                         return (true, newChild);
                     }
 
+                    if(Children.Count == 0 && (token == "+" || token == "-"))
+                    {
+                        RegisterChild(new IntLiteral(0));
+                    }
+
                     Children.AddLast(operatorChild);
 
                     if (token.IsEndOperator())
