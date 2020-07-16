@@ -10,16 +10,25 @@
         "Programming Languages"
     ],
     "contributes": {
-        "languages": [{
-            "id": "rlang",
-            "aliases": ["rLang", "rlang"],
-            "extensions": [".rl"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "rlang",
-            "scopeName": "source.rl",
-            "path": "./syntaxes/rlang.tmLanguage.json"
-        }]
+        "languages": [
+            {
+                "id": "rlang",
+                "aliases": [
+                    "rLang",
+                    "rlang"
+                ],
+                "extensions": [
+                    ".rl"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "rlang",
+                "scopeName": "source.rl",
+                "path": "./syntaxes/rlang.tmLanguage.json"
+            }
+        ]
     }
 }
