@@ -5,12 +5,19 @@
 #   void [alias for BCL type System.Void]
 # 
 
+
+
+
+
 # 
 # Case sensitive
 # No multi-line statements
 # Function names, class names, and variable names must be unique
 # Main function with [int] parameter is entrypoint
 #
+
+
+
 
 #
 # Namespace: namespace Identifier
@@ -26,6 +33,8 @@
 # String Literals: \".*?\"
 # Int Literals: [0-9]+
 # Identifiers: [a-zA-Z_]\w*
+
+
 
 namespace Test
 
@@ -55,6 +64,10 @@ class Program
 	}
 }
 
+
+
+
+
 #(new file)
 
 namespace Test
@@ -78,11 +91,13 @@ internal:
 		name -> n
 		5    -> x
 	}
-	
+
 	def PrintName :: void
 	{
 		Console.Write (n + x:string)
 	}
+
+private:
 
 	def magicalFunction :: void
 	{
@@ -98,7 +113,7 @@ internal:
 			i + 1 -> i
 		}
 	}
-	
+
 	#this might need to be added later on
 	def evenMoreMagicalFunction
 	{
