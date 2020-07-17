@@ -36,6 +36,14 @@
                 "configuration": "./language-configuration.json"
             }
         ],
+        "views": {
+            "explorer": [
+                {
+                "id": "rLangAST",
+                "name": "rLang AST"
+                }
+            ]
+        },
         "snippets": [
             {
               "language": "rlang",

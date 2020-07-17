@@ -29,6 +29,11 @@ namespace rLangLSP
                     return v;
                     });
             });
+
+            ASTNodeMessage[] strings = NodeMessages.GetMessages(tree);
+            var s = Newtonsoft.Json.JsonConvert.SerializeObject(strings);
+            router.SendNotification("rlang/loadAST", s);
+
             router.Window.LogInfo("updated tree");
             trees.AddOrUpdate(documentPath, tree, (k, v) => tree);
         }

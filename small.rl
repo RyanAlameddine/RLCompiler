@@ -14,14 +14,14 @@ class Program
 		var list:[[int]]#cool comments
 	
 		Console.WriteLine a
-	
+
 		Console.Readline () -> a
 	
 		[[1..3], [1..5]] -> list
 		[[1, a, 3], [1 + 5]] -> var l:[[int]]
 		
 	}
-	
+	  
 	#yeet
 	def Add :: a:int, b:int, c:int -> int
 	{
