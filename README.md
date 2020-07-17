@@ -6,7 +6,8 @@ Tokenizer, Parser, and Compiler for rLang (.rl extension), a strongly typed OO l
 * Case sensitive
 * No multi-line statements
 * Function names, class names, and variable names must be unique
-* Main function with [int] parameter is entrypoint
+* Function calls do not require parenthesis (unless the function has no parameters)
+* Main function with \[int] parameter is entrypoint
 
 #
 * Namespace: namespace Identifier
@@ -53,10 +54,15 @@ class TestClass
 {
     def Func :: b:int -> [int]
     {
-        [x * 4 + 2 for x in [1..4] if x > 2] -> var list:[int]
+        [x * 4 + 2 for x in [1..4] if GreaterThanTwo x] -> var list:[int]
         
         # returns [14, 18]
         ret list
+    }
+    
+    def GreaterThanTwo :: a:int -> bool
+    {
+        ret a > 2
     }
 }
 ```
