@@ -32,7 +32,7 @@ namespace RLParser.Scopes
                     if (token.IsWhitespace()) return (true, this);
                     if (token == "i") return (false, this);
                     forStatement = false;
-                    if (token == "in") return (true, RegisterChild(new ExpressionContext(new Regex("^if$"))));
+                    if (token == "in") return (true, RegisterChild(new ExpressionContext(new Regex("^(]|if)$"))));
                     
                     throw new TokenizationException($"Unexpected character '{token}' found instead of \"in\" in list comprehension");
                 }

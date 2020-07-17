@@ -55,6 +55,9 @@ class Program
 		new Ball "wowowie" -> coolObject
 		coolObject.PrintName ()
 
+
+		#[x * 2 for x in [1..5] if x / 2 < 5] -> var y:[int]
+		[x * 2 for x in [1..5]] -> var y:[int] 
 		#delegate magic
 		coolObject.PrintName -> magicalDelegate
 		magicalDelegate ()

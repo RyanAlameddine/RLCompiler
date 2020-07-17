@@ -36,6 +36,12 @@
                 "configuration": "./language-configuration.json"
             }
         ],
+        "snippets": [
+            {
+              "language": "rlang",
+              "path": "./snippets.json"
+            }
+        ],
         "grammars": [
             {
                 "language": "rlang",
