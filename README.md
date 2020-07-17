@@ -1,5 +1,6 @@
 # RLCompiler
-Tokenizer, Parser, and Compiler for rLang (.rl extension), a strongly typed OO language compiled to CIL created by me
+Tokenizer, Parser, and Compiler for rLang (.rl extension), a strongly typed OO language compiled to CIL created by me.
+This repository also includes a vscode extension and a Language Server (see below)
 
 # Rules
  
