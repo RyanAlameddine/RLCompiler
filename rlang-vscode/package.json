@@ -56,7 +56,26 @@
                 "scopeName": "source.rl",
                 "path": "./syntaxes/rlang.tmLanguage.json"
             }
-        ]
+        ],
+        "commands": [
+            {
+                "command": "rLangAST.jumpTo",
+                "title": "jumpTo"
+            }
+        ],
+        "menus": {
+            "view/item/context": [{
+                "command": "rLangAST.jumpTo",
+                "when": "view == rLangAST",
+                "group": "inline"
+            }],
+            "commandPalette": [
+                {
+                  "command": "rLangAST.jumpTo",
+                  "when": "false"
+                }
+              ]
+        }
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",

@@ -55,7 +55,9 @@ export class Node extends vscode.TreeItem {
 
     constructor(
         public readonly label: string,
-        public readonly childrenCount: number
+        public readonly childrenCount: number,
+        public readonly start: number,
+        public readonly end: number,
     ) {
         super(label, childrenCount != 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None);
         this.children = []

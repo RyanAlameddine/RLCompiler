@@ -1,4 +1,5 @@
-namespace System.Test#heyo
+namespace System.Test
+#heyo
 
 class Program
 {

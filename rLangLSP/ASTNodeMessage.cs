@@ -17,7 +17,7 @@ namespace rLangLSP
 
         private static void getMessages(List<ASTNodeMessage> messages, Context root)
         {
-            messages.Add(new ASTNodeMessage(root.ToString(), root.Children.Count));
+            messages.Add(new ASTNodeMessage(root.ToString(), root.Children.Count, root.Characters.Start.Value, root.Characters.End.Value));
             foreach(var child in root.Children)
             {
                 getMessages(messages, child);
@@ -33,10 +33,17 @@ namespace rLangLSP
         [JsonProperty]
         int children { get; set; }
 
-        public ASTNodeMessage(string message, int children)
+        [JsonProperty]
+        int start { get; set; }
+        [JsonProperty]
+        int end { get; set; }
+
+        public ASTNodeMessage(string message, int children, int start, int end)
         {
             this.message = message;
             this.children = children;
+            this.start = start;
+            this.end = end;
         }
     }
 }

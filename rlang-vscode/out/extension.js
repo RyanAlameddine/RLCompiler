@@ -7,6 +7,13 @@ const treeHandler = require("./treeHandler");
 function activate(context) {
     let tree = new treeHandler.RLangASTProvider();
     vscode_1.window.registerTreeDataProvider('rLangAST', tree);
+    vscode_1.commands.registerCommand('rLangAST.jumpTo', (x) => {
+        let code = vscode_1.window.activeTextEditor.document.getText();
+        let start = getPosition(x.start, code);
+        let end = getPosition(x.end, code);
+        vscode_1.window.activeTextEditor.selection = new vscode_1.Selection(start, end);
+        vscode_1.window.activeTextEditor.revealRange(new vscode_1.Range(start, end));
+    });
     // The server is implemented in node
     let serverExe = 'dotnet';
     // If the extension is launched in debug mode then the debug server options are used
@@ -41,15 +48,31 @@ function activate(context) {
 }
 exports.activate = activate;
 function handleAST(x, tree) {
-    tree.root = new treeHandler.Node(x[0]["message"], x[0]["children"]);
+    tree.root = new treeHandler.Node(x[0]["message"], x[0]["children"], x[0]["start"], x[0]["end"]);
     addChildren(x, 0, tree.root);
 }
 function addChildren(x, index, node) {
+    let newIndex = index + 1;
     for (let i = 1; i <= x[index]["children"]; i++) {
-        let newIndex = index + i;
-        let newNode = new treeHandler.Node(x[newIndex]["message"], x[index]["children"]);
+        let newNode = new treeHandler.Node(x[newIndex]["message"], x[newIndex]["children"], x[newIndex]["start"], x[newIndex]["end"]);
         node.children.push(newNode);
-        addChildren(x, newIndex, newNode);
+        newIndex = addChildren(x, newIndex, newNode);
+        newIndex++;
     }
+    return newIndex - 1;
+    // for(let i = 1; i <= x[index]["children"]; i++){
+    //     let newIndex = index + i;
+    //     let newNode = new treeHandler.Node(x[newIndex]["message"], x[index]["children"], x[index]["start"], x[index]["end"]);
+    //     node.children.push(newNode);
+    //     addChildren(x, newIndex, newNode);
+    // }
+}
+function getPosition(c, code) {
+    let line = 0;
+    for (let i = 0; i < c; i++) {
+        if (code[i] == '\n')
+            line++;
+    }
+    return new vscode_1.Position(line, c);
 }
 //# sourceMappingURL=extension.js.map

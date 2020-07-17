@@ -41,10 +41,12 @@ class RLangASTProvider {
 }
 exports.RLangASTProvider = RLangASTProvider;
 class Node extends vscode.TreeItem {
-    constructor(label, childrenCount) {
+    constructor(label, childrenCount, start, end) {
         super(label, childrenCount != 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None);
         this.label = label;
         this.childrenCount = childrenCount;
+        this.start = start;
+        this.end = end;
         this.children = [];
     }
     get tooltip() {
