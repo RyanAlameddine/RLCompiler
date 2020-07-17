@@ -6,6 +6,9 @@ namespace RLParser
     [Serializable]
     public class TokenizationException : Exception
     {
+        public int Start;
+        public int End;
+
         public TokenizationException()
         {
         }

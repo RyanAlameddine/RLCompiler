@@ -65,9 +65,6 @@ class Program
 }
 
 
-
-
-
 #(new file)
 
 namespace Test
@@ -95,8 +92,8 @@ private:
 		[1, 3, 4] -> array
 		[0..5] -> array
 
-		var i:int
-
+		var i:int 
+		
 		while i < list.Length
 		{
 			Console.WriteLine (list.get i)
