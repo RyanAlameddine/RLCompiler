@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RLParser.Scopes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ namespace RLParser
 {
     public static class RLParser
     {
-        public static Context Parse(string code)
+        public static Context Parse(string code, Action<TokenizationException, Context> onError)
         {
             Context root = new FileContext();
 
@@ -40,17 +41,15 @@ namespace RLParser
                     }
                     catch (TokenizationException e)
                     {
-                        Console.WriteLine(e);
-                        Console.WriteLine("On line " + lineNumber);
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine();
+                        onError(e, scope);
+                        
                         while (!codeSpan[i].ToString().IsNewline() || i == codeSpan.Length)
                         {
                             i++;
                             if (i >= codeSpan.Length - 1) break;
                         }
-                        scope = scope.Parent;
+                        while(scope is ExpressionContext || scope is ListDeclarationContext || scope is VariableDefinitionContext || scope is VariableOrIdentifierDefinitionContext)
+                            scope = scope.Parent;
                         tokenStart = i;
                     }
                 }
@@ -67,11 +66,7 @@ namespace RLParser
 
             if (tokenStart < codeSpan.Length - 1 || scope != root)
             {
-                Console.WriteLine(new TokenizationException("Invalid or incomplete namespace/class declaration"));
-                Console.WriteLine("On line " + lineNumber);
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
+                onError(new TokenizationException("Invalid or incomplete namespace/class declaration"), scope);
             }
             return root;
         }

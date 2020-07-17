@@ -33,6 +33,8 @@ namespace rLangLSP
             int c = request.Position.Character;
             int l = request.Position.Line;
 
+            if(lines == null) return new DocumentHighlight[0];
+            
             string token = lines[l][c].ToString();
 
             if (lines[l][c].ToString().IsIdentifier())
@@ -66,9 +68,9 @@ namespace rLangLSP
             return highlights;
         }
 
-        private Position GetPosition(string code, int c)
+        public static Position GetPosition(string code, int c)
         {
-            int line = 1;
+            int line = 0;
             for(int i = 0; i < c; i++)
             {
                 if (code[i] == '\n') line++;

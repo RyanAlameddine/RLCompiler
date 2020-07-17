@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace RLParser
+namespace RLParser.Scopes
 {
-    class FileContext : Context
+    public class FileContext : Context
     {
         public FileContext()
         {
@@ -26,7 +26,10 @@ namespace RLParser
                 return (true, new ClassHeaderContext());
             }
 
-            return (false, this);
+            if (token.IsIdentifier())
+                return (false, this);
+
+            throw new TokenizationException("Invalid identifier in namespace declaration");
         }
 
         public override string ToString() => "File";

@@ -33,8 +33,9 @@ namespace RLParser.Scopes
                 return (true, Parent);
             }
 
-            if (Children.Count == 2 && token.IsWhitespace())
+            if (Children.Count == 2)
             {
+                if (!token.IsNewlineOrWhitespace()) throw new TokenizationException($"Unexpected token '{token}' found in variable definition context");
                 return (true, Parent);
             }
 

@@ -1,6 +1,6 @@
 ﻿namespace RLParser.Scopes
 {
-    class ClassBodyContext : Context
+    public class ClassBodyContext : Context
     {
         private AccessModifiers accessModifier = AccessModifiers.Private;
 

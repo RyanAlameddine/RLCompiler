@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace RLParser
 {
     [Serializable]
-    internal class TokenizationException : Exception
+    public class TokenizationException : Exception
     {
         public TokenizationException()
         {

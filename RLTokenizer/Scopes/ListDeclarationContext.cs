@@ -34,7 +34,7 @@ namespace RLParser.Scopes
                     forStatement = false;
                     if (token == "in") return (true, RegisterChild(new ExpressionContext(new Regex("^if$"))));
                     
-                    throw new TokenizationException("Unexpected character found instead of \"in\" in list comprehension");
+                    throw new TokenizationException($"Unexpected character '{token}' found instead of \"in\" in list comprehension");
                 }
 
                 if (previous == 'f')

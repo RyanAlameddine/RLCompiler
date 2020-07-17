@@ -24,7 +24,8 @@ namespace RLParser.Scopes
                 return Parent.Evaluate(previous, token, next);
             }
 
-            if (!token.IsWhitespace()) throw new TokenizationException($"No whitespace after {Statement} statement");
+            if (!token.IsNewlineOrWhitespace()) 
+                throw new TokenizationException($"No whitespace after {Statement} statement");
             return RegisterChild(new ExpressionContext(otherExitCharacters)).Evaluate(previous, token, next);
         }
 

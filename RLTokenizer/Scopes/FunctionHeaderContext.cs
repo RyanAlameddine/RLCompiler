@@ -56,7 +56,7 @@ namespace RLParser.Scopes
             {
                 if (Children.Last.Value is VariableOrIdentifierDefinitionContext v && !v.IsVariable)
                 {
-                    if(!token.IsNewlineOrWhitespace()) throw new TokenizationException("Unexpected character found after return type");
+                    if(!token.IsNewlineOrWhitespace()) throw new TokenizationException($"Unexpected token '{token}' found at return type");
                     return (true, this);
                 }
 

@@ -21,7 +21,14 @@ namespace RLParser
                 string code = File.ReadAllText(path);
                 Console.Clear();
 
-                Context program = RLParser.Parse(code);
+                Context program = RLParser.Parse(code, (e, l) =>
+                {
+                    Console.WriteLine(e);
+                    Console.WriteLine("On line " + l.Lines.End.Value);
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                });
                 program.ConsolePrint();
 
                 if (Console.KeyAvailable)

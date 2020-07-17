@@ -15,7 +15,7 @@ namespace RLParser.Scopes
             }
             set
             {
-                if (identifier != null && identifier.IsKeyword()) throw new TokenizationException("Identifier is a keyword");
+                if (value != null && value.IsKeyword()) throw new TokenizationException("Identifier is a keyword");
                 identifier = value;
             }
         }

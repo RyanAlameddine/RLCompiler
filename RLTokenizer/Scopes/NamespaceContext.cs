@@ -37,7 +37,12 @@ namespace RLParser.Scopes
                 throw new TokenizationException("Namespace token is not a valid identifier");
             }
 
-            return (false, this);
+            if(token.IsIdentifier())
+                return (false, this);
+
+            if (token == ".") return (true, this);
+
+            throw new TokenizationException("Invalid identifier in namespace declaration");
         }
 
         public override string ToString()

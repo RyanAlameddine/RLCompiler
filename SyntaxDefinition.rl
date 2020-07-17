@@ -72,7 +72,7 @@ class Program
 
 namespace Test
 
-class Ball:Sprite
+class Ball : Sprite
 {
 
 private:
@@ -81,16 +81,6 @@ private:
 	var x:int
 	
 internal:
-
-	def Ball :: name:string -> Ball
-	{
-		if name == "stan"
-		{
-			throw CodeNotCleanEnoughException "wow"
-		}
-		name -> n
-		5    -> x
-	}
 
 	def PrintName :: void
 	{

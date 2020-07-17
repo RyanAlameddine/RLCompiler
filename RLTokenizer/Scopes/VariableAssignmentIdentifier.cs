@@ -7,7 +7,7 @@
         {
             if (IsNewVariable)
             {
-                if (!token.IsNewlineOrWhitespace()) throw new TokenizationException("Unexpected character found in variable assignment");
+                if (!token.IsNewlineOrWhitespace()) throw new TokenizationException($"Unexpected character '{token}' found in variable assignment");
                 return (true, Parent);
             }
             if (token == "var")

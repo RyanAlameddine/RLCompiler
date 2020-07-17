@@ -6,10 +6,20 @@ namespace RLParser.Scopes
     {
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
+            if(token == "{")
+            {
+                if(Children.Count != 0 && Children.Last.Value is ConditionalExpressionContext c)
+                {
+                    return (true, c.RegisterChild(new ScopeBodyContext()));
+                }
+                return (true, RegisterChild(new ScopeBodyContext()));
+            }
+
             if(token == "}")
             {
                 //if (!isClean) throw new TokenizationException("Inclomplete statement in function body");
-                return (true, Parent.Parent);
+                if(Parent is FunctionHeaderContext) return (true, Parent.Parent);
+                return (true, Parent);
             }
 
             if (token.IsNewlineOrWhitespace()) return (true, this);

@@ -51,21 +51,29 @@ namespace rLangLSP
 
         public async Task<Unit> Handle(DidChangeTextDocumentParams request, CancellationToken cancellationToken)
         {
-            var documentPath = request.TextDocument.Uri.ToString();
-            var text = request.ContentChanges.FirstOrDefault()?.Text;
-
-            await Task.Run(() => _bufferManager.UpdateText(documentPath, text));
-// _router.Window.LogInfo($"Updated buffer for document: {documentPath}\n{text}");
-            return Unit.Value;
+            //_router.Window.LogInfo(request.ContentChanges.FirstOrDefault()?.Text);
+            return await TextChanged(request.TextDocument.Uri, request.ContentChanges.FirstOrDefault()?.Text);
         }
 
         public async Task<Unit> Handle(DidOpenTextDocumentParams request, CancellationToken cancellationToken)
         {
-            var documentPath = request.TextDocument.Uri.ToString();
-            var text = request.TextDocument.Text;
+            return await TextChanged(request.TextDocument.Uri, request.TextDocument.Text);
+        }
 
-            await Task.Run(() => _bufferManager.UpdateText(documentPath, text));
-            //_router.Window.LogInfo($"opened buffer for document: {documentPath}\n{text}");
+        private async Task<Unit> TextChanged(DocumentUri uri, string text)
+        {
+            var documentPath = uri.ToString();
+            _bufferManager.ClearErrors(documentPath);
+            await Task.Run(() => _bufferManager.UpdateText(documentPath, text, _router));
+
+            _router.Window.LogInfo($"hmm + ");
+            _router.TextDocument.PublishDiagnostics(new PublishDiagnosticsParams()
+            {
+                Uri = uri,
+                Diagnostics = Diagnostics.GetDiagnostics
+                (documentPath, _router, _bufferManager)
+            });
+            // _router.Window.LogInfo($"Updated buffer for document: {documentPath}\n{text}");
             return Unit.Value;
         }
 

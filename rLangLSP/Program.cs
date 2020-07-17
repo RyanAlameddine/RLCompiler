@@ -19,6 +19,7 @@ namespace rLangLSP
                     .WithServices(ConfigureServices)
                     .WithHandler<TextDocumentSyncHandler>()
                     .WithHandler<DocumentHighlightHandler>()
+                    .WithHandler<CompletionHandler>()
                  );
 
             await server.WaitForExit;
