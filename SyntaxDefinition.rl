@@ -34,6 +34,8 @@
 # Int Literals: [0-9]+
 # Identifiers: [a-zA-Z_]\w*
 
+# List Comprehensions: [output for identifier in list if condition]
+
 
 
 namespace Test
@@ -84,7 +86,7 @@ internal:
 		Console.Write (n + x:string)
 	}
 
-private:
+public:
 
 	def magicalFunction :: void#hi there
 	{
@@ -104,7 +106,7 @@ private:
 	#this might need to be added later on
 	def evenMoreMagicalFunction
 	{
-		for val:int in [0..5]
+		for val:int in [x * 4 + 2 for x in [1..3] if x > 2]
 		{
 			Console.WriteLine val
 		}

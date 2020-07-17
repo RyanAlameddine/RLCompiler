@@ -56,19 +56,35 @@ namespace rLangLSP
 
             if (context is FileContext)
             {
-                items.Add(CreateKeyword("namespace"));
-                items.Add(CreateKeyword("class"));
+                items.Add(CreateKeyword("namespace "));
+                items.Add(CreateKeyword("class "));
             }
 
             if (context is ClassBodyContext)
             {
-                items.Add(CreateKeyword("var"));
-                items.Add(CreateKeyword("def"));
-                items.Add(CreateKeyword("public:\n"));
-                items.Add(CreateKeyword("private:\n"));
+                items.Add(CreateKeyword("var "));
+                items.Add(CreateKeyword("def "));
+                items.Add(CreateKeywordDrop("public:\n\t"  , request.Position));
+                items.Add(CreateKeywordDrop("private:\n\t" , request.Position));
+                items.Add(CreateKeywordDrop("internal:\n\t", request.Position));
             }
 
             return items;
+        }
+
+        private CompletionItem CreateKeywordDrop(string v, Position start)
+        {
+            var item = CreateKeyword(v);
+            var lineNumber = start.Line;
+            var endChar = start.Character;
+
+            item.AdditionalTextEdits = new TextEditContainer(new TextEdit()
+            {
+                Range = new Range(new Position(lineNumber, 0), new Position(lineNumber, endChar)),
+                NewText = ""
+            });
+
+            return item;
         }
 
         private CompletionItem CreateKeyword(string v)
