@@ -2,7 +2,7 @@
 
 namespace RLParser.Scopes
 {
-    class VariableOrIdentifierDefinitionContext : VariableDefinitionContext
+    public class VariableOrIdentifierDefinitionContext : VariableDefinitionContext
     {
         public bool IsVariable { get; private set; } = true;
         public string Identifier { get; private set; }

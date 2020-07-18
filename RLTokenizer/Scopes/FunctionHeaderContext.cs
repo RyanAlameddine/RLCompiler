@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace RLParser.Scopes
 {
-    class FunctionHeaderContext : Context
+    public class FunctionHeaderContext : Context
     {
         private bool namePresent  = false;
         private bool colonPresent = false;

@@ -5,19 +5,12 @@
 #   void [alias for BCL type System.Void]
 # 
 
-
-
-
-
 # 
 # Case sensitive
 # No multi-line statements
 # Function names, class names, and variable names must be unique
 # Main function with [int] parameter is entrypoint
 #
-
-
-
 
 #
 # Namespace: namespace Identifier
@@ -36,8 +29,6 @@
 
 # List Comprehensions: [output for identifier in list if condition]
 
-
-
 namespace Test
 
 class Program
@@ -48,19 +39,18 @@ class Program
 
 	def Main :: args:[int] -> void
 	{
-		Add 1 2 3 -> x
-
+		Add 1 2 3 -> x 
+		
 		Add x 2 (Add 1 2 3) -> x
-
+		
 		new Ball "wowowie" -> coolObject
 		coolObject.PrintName ()
-
 
 		#[x * 2 for x in [1..5] if x / 2 < 5] -> var y:[int]
 		[x * 2 for x in [1..5]] -> var y:[int] 
 		#delegate magic
 		coolObject.PrintName -> magicalDelegate
-		magicalDelegate ()
+		magicalDelegate () 
 	}
 
 	def Add :: a:int, b:int, c:int -> int
@@ -84,7 +74,7 @@ private:
 	
 internal:
 
-	def PrintName :: void
+	def PrintName
 	{
 		Console.Write (n + x:string)
 	}
@@ -109,7 +99,7 @@ public:
 	#this might need to be added later on
 	def evenMoreMagicalFunction
 	{
-		for val:int in [x * 4 + 2 for x in [1..3] if x > 2]
+		for val:int in [x * 4 + n for x in [1..3] if x > 2]
 		{
 			Console.WriteLine val
 		}

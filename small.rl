@@ -22,7 +22,7 @@ class Program
 		[[1, a, 3], [1 + 5]] -> var l:[[int]]
 		
 	}
-	  
+	
 	#yeet
 	def Add :: a:int, b:int, c:int -> int
 	{

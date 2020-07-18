@@ -51,7 +51,9 @@ export class RLangASTProvider implements vscode.TreeDataProvider<Node> {
 
 export class Node extends vscode.TreeItem {
 
-    children: Node[]
+    children: Node[];
+
+    desc: string = "";
 
     constructor(
         public readonly label: string,
@@ -61,10 +63,19 @@ export class Node extends vscode.TreeItem {
     ) {
         super(label, childrenCount != 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None);
         this.children = []
+        if(label.includes('(')){
+            let index = label.indexOf('(');
+            this.desc = label.substring(index, label.length - 1);
+            this.label = label.substring(0, index - 1);
+        }
     }
 
     get tooltip(): string {
         return `${this.label}`;
+    }
+
+    get description(): string {
+        return `${this.desc}`;
     }
     
     //   iconPath = {

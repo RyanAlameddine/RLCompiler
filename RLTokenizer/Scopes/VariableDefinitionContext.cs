@@ -2,14 +2,14 @@
 
 namespace RLParser.Scopes
 {
-    class VariableDefinitionContext : Context
+    public class VariableDefinitionContext : Context
     {
         protected Regex otherExitCharacters = null;
 
         protected bool colonPresent = false;
 
-        public string Name { get => ((IdentifierContext)Children.First.Value     ).Identifier; }
-        public string Type { get => ((IdentifierContext)Children.First.Next.Value).Identifier; }
+        public string Name { get => Children.Count == 0 ? null : ((IdentifierContext)Children.First.Value     ).Identifier; }
+        public string Type { get => Children.Count == 0 ? null : ((IdentifierContext)Children.First.Next.Value).Identifier; }
 
         public AccessModifiers AccessModifier { get; private set; }
 

@@ -28,7 +28,6 @@ namespace rLangLSP
 
         public async Task<DocumentHighlightContainer> Handle(DocumentHighlightParams request, CancellationToken cancellationToken)
         {
-            router.Window.LogInfo("highlight request");
             (var code, var lines, var tree) = bufferManager.Get(request.TextDocument.Uri.ToString());
             int c = request.Position.Character;
             int l = request.Position.Line;

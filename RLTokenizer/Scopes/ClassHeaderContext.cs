@@ -2,7 +2,7 @@
 
 namespace RLParser.Scopes
 {
-    class ClassHeaderContext : Context
+    public class ClassHeaderContext : Context
     {
         public string Name { get => ((IdentifierContext)Children.First.Value).Identifier; }
         public string Base { get => Children.Count < 3 ? null : ((IdentifierContext)Children.First.Next.Value).Identifier; }

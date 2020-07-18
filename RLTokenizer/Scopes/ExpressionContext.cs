@@ -109,6 +109,7 @@ namespace RLParser.Scopes
                 if (!(token + next).IsNumber())
                 {
                     var child = new IntLiteral(int.Parse(token));
+                    child.Parent = this;
 
                     var e = CheckEndOp(child);
                     if (e != default) return e;

@@ -38,7 +38,7 @@
         public override string ToString() => "Class Body";
     }
 
-    enum AccessModifiers
+    public enum AccessModifiers
     {
         Public,
         Private,

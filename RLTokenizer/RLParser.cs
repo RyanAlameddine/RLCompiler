@@ -11,6 +11,7 @@ namespace RLParser
         public static Context Parse(string code, Action<TokenizationException, Context> onError)
         {
             Context root = new FileContext();
+            root.Parent = root;
 
             //The current tokenization scope
             Context scope = root;

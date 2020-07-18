@@ -47,10 +47,19 @@ class Node extends vscode.TreeItem {
         this.childrenCount = childrenCount;
         this.start = start;
         this.end = end;
+        this.desc = "";
         this.children = [];
+        if (label.includes('(')) {
+            let index = label.indexOf('(');
+            this.desc = label.substring(index, label.length - 1);
+            this.label = label.substring(0, index - 1);
+        }
     }
     get tooltip() {
         return `${this.label}`;
+    }
+    get description() {
+        return `${this.desc}`;
     }
 }
 exports.Node = Node;

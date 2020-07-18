@@ -29,13 +29,20 @@ namespace rLangLSP
                     return v;
                     });
             });
+            trees.AddOrUpdate(documentPath, tree, (k, v) => tree);
+            try
+            {
 
-            ASTNodeMessage[] strings = NodeMessages.GetMessages(tree);
-            var s = Newtonsoft.Json.JsonConvert.SerializeObject(strings);
-            router.SendNotification("rlang/loadAST", s);
+                ASTNodeMessage[] strings = NodeMessages.GetMessages(tree);
+                var s = Newtonsoft.Json.JsonConvert.SerializeObject(strings);
+                router.SendNotification("rlang/loadAST", s);
+            }
+            catch(Exception e)
+            {
+                router.Window.LogError(e.ToString());
+            }
 
             router.Window.LogInfo("updated tree");
-            trees.AddOrUpdate(documentPath, tree, (k, v) => tree);
         }
 
         public string[] GetLines(string documentPath)

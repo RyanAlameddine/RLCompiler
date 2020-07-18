@@ -21,6 +21,7 @@ namespace rLangLSP
                     .WithHandler<DocumentHighlightHandler>()
                     .WithHandler<CompletionHandler>()
                     .WithHandler<CompletionResolveHandler>()
+                    .WithHandler<DefinitionProvider>()
                  );
 
             await server.WaitForExit;

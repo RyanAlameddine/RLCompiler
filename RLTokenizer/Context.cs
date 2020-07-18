@@ -61,6 +61,10 @@ namespace RLParser
             }
             Console.ResetColor();
             Console.WriteLine(ToString());
+            if(Parent == null)
+            {
+                Console.WriteLine("this shouldnt work");
+            }
             foreach(var child in Children)
             {
                 child.ConsolePrint(depth + 1);
