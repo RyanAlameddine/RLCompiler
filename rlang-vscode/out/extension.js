@@ -5,25 +5,25 @@ const vscode_languageclient_1 = require("vscode-languageclient");
 const vscode_jsonrpc_1 = require("vscode-jsonrpc");
 const treeHandler = require("./treeHandler");
 function activate(context) {
-    let tree = new treeHandler.RLangASTProvider();
+    const tree = new treeHandler.RLangASTProvider();
     vscode_1.window.registerTreeDataProvider('rLangAST', tree);
     vscode_1.commands.registerCommand('rLangAST.jumpTo', (x) => {
-        let code = vscode_1.window.activeTextEditor.document.getText();
-        let start = getPosition(x.start, code);
-        let end = getPosition(x.end, code);
+        const code = vscode_1.window.activeTextEditor.document.getText();
+        const start = getPosition(x.start, code);
+        const end = getPosition(x.end, code);
         vscode_1.window.activeTextEditor.selection = new vscode_1.Selection(start, end);
         vscode_1.window.activeTextEditor.revealRange(new vscode_1.Range(start, end));
     });
     // The server is implemented in node
-    let serverExe = 'dotnet';
+    const serverExe = 'dotnet';
     // If the extension is launched in debug mode then the debug server options are used
     // Otherwise the run options are used
-    let serverOptions = {
-        run: { command: serverExe, args: ['/src/rLangLSP.dll'] },
+    const serverOptions = {
+        run: { command: serverExe, args: [__dirname + '/LSP/rLangLSP.dll'] },
         debug: { command: serverExe, args: ['C:/Users/rhala/Code/RLCompiler/rLangLSP/bin/Debug/netcoreapp3.0/rLangLSP.dll'] }
     };
     // Options to control the language client
-    let clientOptions = {
+    const clientOptions = {
         documentSelector: [
             {
                 pattern: '**/*.rl',
@@ -41,7 +41,7 @@ function activate(context) {
         handleAST(JSON.parse(x), tree);
         tree.change();
     }));
-    let disposable = client.start();
+    const disposable = client.start();
     // Push the disposable to the context's subscriptions so that the
     // client can be deactivated on extension deactivation
     context.subscriptions.push(disposable);
@@ -54,7 +54,7 @@ function handleAST(x, tree) {
 function addChildren(x, index, node) {
     let newIndex = index + 1;
     for (let i = 1; i <= x[index]["children"]; i++) {
-        let newNode = new treeHandler.Node(x[newIndex]["message"], x[newIndex]["children"], x[newIndex]["start"], x[newIndex]["end"]);
+        const newNode = new treeHandler.Node(x[newIndex]["message"], x[newIndex]["children"], x[newIndex]["start"], x[newIndex]["end"]);
         node.children.push(newNode);
         newIndex = addChildren(x, newIndex, newNode);
         newIndex++;

@@ -10,7 +10,7 @@ class Program
 		Add (1*2) 2 3 -> var x:int
 		ret a + b * c 
 	}
-
+	
 	def Main
 	{
 		var a:int

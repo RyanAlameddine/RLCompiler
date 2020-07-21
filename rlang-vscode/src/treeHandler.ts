@@ -1,9 +1,6 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
 
 export class RLangASTProvider implements vscode.TreeDataProvider<Node> {
-    constructor() {}
 
     root: Node;
 
@@ -53,7 +50,7 @@ export class Node extends vscode.TreeItem {
 
     children: Node[];
 
-    desc: string = "";
+    desc = "";
 
     constructor(
         public readonly label: string,
@@ -64,7 +61,7 @@ export class Node extends vscode.TreeItem {
         super(label, childrenCount != 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None);
         this.children = []
         if(label.includes('(')){
-            let index = label.indexOf('(');
+            const index = label.indexOf('(');
             this.desc = label.substring(index, label.length - 1);
             this.label = label.substring(0, index - 1);
         }

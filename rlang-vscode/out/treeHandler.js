@@ -50,7 +50,7 @@ class Node extends vscode.TreeItem {
         this.desc = "";
         this.children = [];
         if (label.includes('(')) {
-            let index = label.indexOf('(');
+            const index = label.indexOf('(');
             this.desc = label.substring(index, label.length - 1);
             this.label = label.substring(0, index - 1);
         }
