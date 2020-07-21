@@ -21,6 +21,7 @@ This repository also includes a vscode extension and a Language Server (see belo
 * Types: (int|bool|string)
 * Variables: var
 * Loops: (while condition|for variable in array)
+* Conditionals: (if condition|elif condition|else)
 * Char Literals: '\\?.'
 * String Literals: \".*?\"
 * Int Literals: \[0-9]+
@@ -47,18 +48,21 @@ Also contains the rLang language server protocol implemented in C# a vscode exte
 
 Some example files can be found in this repository (see anything with the .rl extension)
 
-```scala
+```python
 namespace Good.Old.Times
 
 #wow such good code
 class TestClass
 {
-    def Func :: b:int -> [int]
+    def Func :: a:int, b:int -> [[int]]
     {
-        [x * 4 + 2 for x in [1..4] if GreaterThanTwo x] -> var list:[int]
+        var list:[int]
+        [x * 4 + 2 for x in [1..4] if GreaterThanTwo x] -> list
+        #this evaluates to [14, 18]
         
-        # returns [14, 18]
-        ret list
+        [list, [1, 2, 3 a], [b]] -> var megaList:[[int]]
+        
+        ret megaList
     }
     
     def GreaterThanTwo :: a:int -> bool
