@@ -3,7 +3,7 @@
     "displayName": "rLang Language Support",
     "description": "Adds language support for the rLang programming language created by Github User RyanAlameddine",
     "publisher": "rhalameddine",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "engines": {
         "vscode": "^1.47.0"
     },

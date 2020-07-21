@@ -22,6 +22,7 @@ namespace rLangLSP
                     .WithHandler<CompletionHandler>()
                     .WithHandler<CompletionResolveHandler>()
                     .WithHandler<DefinitionProvider>()
+                    .WithHandler<OnTypeFormattingHandler>()
                  );
 
             await server.WaitForExit;
