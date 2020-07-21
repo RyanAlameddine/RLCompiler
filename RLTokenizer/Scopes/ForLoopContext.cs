@@ -24,7 +24,7 @@ namespace RLParser.Scopes
             }
 
             if (!token.IsNewlineOrWhitespace()) 
-                throw new TokenizationException("No space found after for declaration");
+                throw new CompileException("No space found after for declaration");
 
             if (Children.Count == 0) 
                 return (true, RegisterChild(new VariableDefinitionContext(AccessModifiers.Scope)));

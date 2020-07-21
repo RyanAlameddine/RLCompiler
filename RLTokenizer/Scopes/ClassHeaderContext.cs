@@ -18,7 +18,7 @@ namespace RLParser.Scopes
             {
                 if (token.IsNewlineOrWhitespace()) return (true, new IdentifierContext());
 
-                throw new TokenizationException("No whitespace after class declaration");
+                throw new CompileException("No whitespace after class declaration");
             }
 
             if(Children.Count == 1)
@@ -33,7 +33,7 @@ namespace RLParser.Scopes
 
             if (token.IsNewlineOrWhitespace()) return (true, this);
 
-            throw new TokenizationException("Invalid character found in class declaration");
+            throw new CompileException("Invalid character found in class declaration");
         }
 
         public override string ToString() => $"Class Header (Name: {Name}" + (Base == null ? ")" : $"{Base})");

@@ -31,7 +31,7 @@ namespace RLParser.Scopes
                 if(last is VariableOrIdentifierDefinitionContext c)
                 {
                     if (!c.IsVariable) return c.Identifier;
-                    throw new TokenizationException("Return type is set to a variable declaration");
+                    throw new CompileException("Return type is set to a variable declaration");
                 }
                 return ((IdentifierContext)last).Identifier;
             }
@@ -56,7 +56,7 @@ namespace RLParser.Scopes
             {
                 if (Children.Last.Value is VariableOrIdentifierDefinitionContext v && !v.IsVariable)
                 {
-                    if(!token.IsNewlineOrWhitespace()) throw new TokenizationException($"Unexpected token '{token}' found at return type");
+                    if(!token.IsNewlineOrWhitespace()) throw new CompileException($"Unexpected token '{token}' found at return type");
                     return (true, this);
                 }
 
@@ -72,7 +72,7 @@ namespace RLParser.Scopes
                     return (true, new VariableDefinitionContext(AccessModifiers.Scope, ","));
                 }
                 if (token.IsWhitespace()) return (true, this);
-                throw new TokenizationException("Comma not found after function parameter declaration");
+                throw new CompileException("Comma not found after function parameter declaration");
             }
 
             if(Children.Count == 0)
@@ -83,7 +83,7 @@ namespace RLParser.Scopes
                     return (true, new IdentifierContext());
                 }
                 if (!token.IsNewlineOrWhitespace()) 
-                    throw new TokenizationException("No whitespace found after function declaration");
+                    throw new CompileException("No whitespace found after function declaration");
             }
 
             if(Children.Count == 1)
@@ -95,10 +95,10 @@ namespace RLParser.Scopes
                     colonPresent = true;
                     return (true, new VariableOrIdentifierDefinitionContext(AccessModifiers.Scope, ","));
                 }
-                throw new TokenizationException("No :: found after function declaration");
+                throw new CompileException("No :: found after function declaration");
             }
 
-            throw new TokenizationException("Failed to complete Function declaration");
+            throw new CompileException("Failed to complete Function declaration");
         }
 
         public override string ToString()

@@ -30,7 +30,7 @@
             }
 
             if (token.IsNewlineOrWhitespace()) return (true, this);
-            else if (next.ToString().IsNewline()) throw new TokenizationException("Invalid statement");
+            else if (next.ToString().IsNewline()) throw new CompileException("Invalid statement");
 
             return (false, this);
         }

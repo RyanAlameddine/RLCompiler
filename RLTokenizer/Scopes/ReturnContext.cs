@@ -9,7 +9,7 @@
                 if (token.IsWhitespace()) return (true, new ExpressionContext());
             }
 
-            if (!token.IsNewlineOrWhitespace()) throw new TokenizationException($"Unexpected character '{token}' found in return statement");
+            if (!token.IsNewlineOrWhitespace()) throw new CompileException($"Unexpected character '{token}' found in return statement");
             return (true, Parent);
         }
 

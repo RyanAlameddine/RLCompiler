@@ -179,7 +179,7 @@ namespace RLParser.Scopes
             if (token == ")")
             {
                 if (Parenthesis) return (true, Parent);
-                throw new TokenizationException("Closing parenthesis found without open parenthesis");
+                throw new CompileException("Closing parenthesis found without open parenthesis");
             }
 
             if (token == ".")
@@ -203,7 +203,7 @@ namespace RLParser.Scopes
                 return (true, RegisterChild(new ListDeclarationContext(false)));
             }
 
-            throw new TokenizationException("Unknown character found in statment");
+            throw new CompileException("Unknown character found in statment");
         }
 
         private (bool, Context) CheckEndOp(Context child)

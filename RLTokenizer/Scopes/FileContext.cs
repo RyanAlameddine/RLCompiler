@@ -29,7 +29,7 @@ namespace RLParser.Scopes
             if (token.IsIdentifier())
                 return (false, this);
 
-            throw new TokenizationException("Invalid identifier in namespace declaration");
+            throw new CompileException("Invalid identifier in namespace declaration");
         }
 
         public override string ToString() => "File";

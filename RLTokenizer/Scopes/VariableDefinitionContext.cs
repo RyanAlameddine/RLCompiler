@@ -28,14 +28,14 @@ namespace RLParser.Scopes
         {
             if (token.IsNewline() || otherExitCharacters != null && otherExitCharacters.IsMatch(token))
             {
-                if (Children.Count != 2) throw new TokenizationException("Incomplete variable declaration");
+                if (Children.Count != 2) throw new CompileException("Incomplete variable declaration");
                 if (token.IsNewline()) return Parent.Evaluate(previous, token, next);
                 return (true, Parent);
             }
 
             if (Children.Count == 2)
             {
-                if (!token.IsNewlineOrWhitespace()) throw new TokenizationException($"Unexpected token '{token}' found in variable definition context");
+                if (!token.IsNewlineOrWhitespace()) throw new CompileException($"Unexpected token '{token}' found in variable definition context");
                 return (true, Parent);
             }
 
@@ -55,7 +55,7 @@ namespace RLParser.Scopes
                     return new IdentifierContext().Evaluate(previous, token, next);
                 }
 
-                throw new TokenizationException("No whitespace after var in variable declaration");
+                throw new CompileException("No whitespace after var in variable declaration");
             }
 
             if (token.IsNewline()) return (true, this);
@@ -63,15 +63,15 @@ namespace RLParser.Scopes
             if (token == ":")
             {
                 if (colonPresent) 
-                    throw new TokenizationException("Two :'s found in variable declaration");
+                    throw new CompileException("Two :'s found in variable declaration");
                 colonPresent = true;
                 return (true, new TypeIdentifierContext());
             }
 
             if (colonPresent) return (true, new IdentifierContext());
 
-            if (token.IsWhitespace()) throw new TokenizationException("Space found before : in variable declaration");
-            throw new TokenizationException("Type identifier found before : in variable declaration");
+            if (token.IsWhitespace()) throw new CompileException("Space found before : in variable declaration");
+            throw new CompileException("Type identifier found before : in variable declaration");
         }
 
         public override string ToString() => $"Variable Declaration (Name: {Name}, Type: {Type}, Access: {AccessModifier})";

@@ -15,7 +15,7 @@ namespace RLParser.Scopes
             }
             set
             {
-                if (value != null && value.IsKeyword()) throw new TokenizationException("Identifier is a keyword");
+                if (value != null && value.IsKeyword()) throw new CompileException("Identifier is a keyword");
                 identifier = value;
             }
         }
@@ -31,7 +31,7 @@ namespace RLParser.Scopes
                     Identifier = token;
                     return (true, Parent);
                 }
-                throw new TokenizationException("Token is not a valid identifier");
+                throw new CompileException("Token is not a valid identifier");
             }
 
             return (false, this);

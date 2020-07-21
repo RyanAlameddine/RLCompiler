@@ -26,7 +26,7 @@ namespace RLParser.Scopes
                     Identifier = token[0..^ListCount];
                     return (true, Parent);
                 }
-                if (listClosedCount > ListCount) throw new TokenizationException("Closing bracket found with no opening bracket in type declaration");
+                if (listClosedCount > ListCount) throw new CompileException("Closing bracket found with no opening bracket in type declaration");
             }
 
             if (!(token + next).IsIdentifier() && next != ']')
@@ -36,7 +36,7 @@ namespace RLParser.Scopes
                     Identifier = token;
                     return (true, Parent);
                 }
-                throw new TokenizationException("Token is not a valid identifier");
+                throw new CompileException("Token is not a valid identifier");
             }
 
             return (false, this);

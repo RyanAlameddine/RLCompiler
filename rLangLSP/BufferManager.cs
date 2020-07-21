@@ -14,7 +14,7 @@ namespace rLangLSP
         private ConcurrentDictionary<string, string[]> lines = new ConcurrentDictionary<string, string[]>();
         private ConcurrentDictionary<string, Context> trees = new ConcurrentDictionary<string, Context>();
 
-        private ConcurrentDictionary<string, List<(TokenizationException, Context)>> errors = new ConcurrentDictionary<string, List<(TokenizationException, Context)>>();
+        private ConcurrentDictionary<string, List<(CompileException, Context)>> errors = new ConcurrentDictionary<string, List<(CompileException, Context)>>();
 
         public void UpdateText(string documentPath, string buffer, ILanguageServer router)
         {
@@ -24,7 +24,7 @@ namespace rLangLSP
 
             Context tree = RLParser.RLParser.Parse(buffer, (e, l) =>
             {
-                errors.AddOrUpdate(documentPath, new List<(TokenizationException, Context)>() { (e, l) }, (k, v) => {
+                errors.AddOrUpdate(documentPath, new List<(CompileException, Context)>() { (e, l) }, (k, v) => {
                     v.Add((e, l));
                     return v;
                     });
@@ -65,7 +65,7 @@ namespace rLangLSP
             return (GetCode(documentPath), GetLines(documentPath), GetTree(documentPath));
         }
 
-        public List<(TokenizationException, Context)> GetErrors(string documentPath)
+        public List<(CompileException, Context)> GetErrors(string documentPath)
         {
             return errors.TryGetValue(documentPath, out var buffer) ? buffer : default;
         }

@@ -3,6 +3,8 @@ namespace System.Test
 
 class Program
 {
+	var a:int
+
 	def Add #:: a:int, b:int, c:int -> int
 	{
 		Add (1*2) 2 3 -> var x:int

@@ -18,7 +18,7 @@ namespace RLParser.Scopes
             {
                 if (Namespaces.Count == 0)
                 {
-                    throw new TokenizationException("No namespace identifier specified");
+                    throw new CompileException("No namespace identifier specified");
                 }
                 return (true, Parent);
             }
@@ -34,7 +34,7 @@ namespace RLParser.Scopes
                     Namespaces.AddLast(token);
                     return (true, this);
                 }
-                throw new TokenizationException("Namespace token is not a valid identifier");
+                throw new CompileException("Namespace token is not a valid identifier");
             }
 
             if(token.IsIdentifier())
@@ -42,7 +42,7 @@ namespace RLParser.Scopes
 
             if (token == ".") return (true, this);
 
-            throw new TokenizationException("Invalid identifier in namespace declaration");
+            throw new CompileException("Invalid identifier in namespace declaration");
         }
 
         public override string ToString()

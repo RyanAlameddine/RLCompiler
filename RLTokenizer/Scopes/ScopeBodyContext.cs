@@ -52,7 +52,7 @@ namespace RLParser.Scopes
                 {
                     return (true, CheckStatementRules(token));
                 }
-                throw new TokenizationException("Token is not a valid identifier");
+                throw new CompileException("Token is not a valid identifier");
             }
 
             return (false, this);

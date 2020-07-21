@@ -24,7 +24,7 @@ namespace RLParser.Scopes
             {
                 if (previous == ']')
                 {
-                    if (Children.Count < 3) throw new TokenizationException("Incomplete list comprenehsion");
+                    if (Children.Count < 3) throw new CompileException("Incomplete list comprenehsion");
                     return Parent.Evaluate(previous, token, next);
                 }
                 if (forStatement)
@@ -34,7 +34,7 @@ namespace RLParser.Scopes
                     forStatement = false;
                     if (token == "in") return (true, RegisterChild(new ExpressionContext(new Regex("^(]|if)$"))));
                     
-                    throw new TokenizationException($"Unexpected character '{token}' found instead of \"in\" in list comprehension");
+                    throw new CompileException($"Unexpected character '{token}' found instead of \"in\" in list comprehension");
                 }
 
                 if (previous == 'f')
@@ -43,7 +43,7 @@ namespace RLParser.Scopes
 
                 if (token.IsWhitespace()) return (true, this);
 
-                throw new TokenizationException("Incomplete list comprenehsion");
+                throw new CompileException("Incomplete list comprenehsion");
             }
 
             if (expressionComplete)
@@ -58,12 +58,12 @@ namespace RLParser.Scopes
                 {
                     IsListComprehension = true;
                     forStatement = true;
-                    if (!token.IsWhitespace()) throw new TokenizationException("No space found after for in list comprehension");
+                    if (!token.IsWhitespace()) throw new CompileException("No space found after for in list comprehension");
                     return (true, RegisterChild(new IdentifierContext()));
                 }
                 else
                 {
-                    throw new TokenizationException("List declaration incomplete");
+                    throw new CompileException("List declaration incomplete");
                 }
             }
 

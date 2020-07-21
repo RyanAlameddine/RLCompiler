@@ -8,7 +8,7 @@ namespace RLParser
 {
     public static class RLParser
     {
-        public static Context Parse(string code, Action<TokenizationException, Context> onError)
+        public static Context Parse(string code, Action<CompileException, Context> onError)
         {
             Context root = new FileContext();
             root.Parent = root;
@@ -40,7 +40,7 @@ namespace RLParser
                     {
                         (reset, scope) = scope.Evaluate(previous, token, next);
                     }
-                    catch (TokenizationException e)
+                    catch (CompileException e)
                     {
                         e.Start = tokenStart;
                         e.End = tokenStart + token.Length;
@@ -69,7 +69,7 @@ namespace RLParser
 
             if (tokenStart < codeSpan.Length - 1 || scope != root)
             {
-                onError(new TokenizationException("Invalid or incomplete namespace/class declaration"), scope);
+                onError(new CompileException("Invalid or incomplete namespace/class declaration"), scope);
             }
             return root;
         }
