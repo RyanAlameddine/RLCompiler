@@ -1,24 +1,35 @@
-namespace System.Test
+using System
+
+namespace rLang.Test
 #heyo
 
 class Program
 {
 	var a:int
 
-	def Add #:: a:int, b:int, c:int -> int
+	def Add :: bool #:: a:int, b:int, c:int -> int
 	{
-		Add (1*2) 2 3 -> var x:int
-		ret a + b * c 
+		5:string -> var str:string
+		Math (1*2) 2 3 -> var hmm:bool
+
+		str:int -> var x:int
+
+		if x < 3
+		{
+			ret false
+		}
+
+		ret a * x == 1
 	}
 	
 	def Main
 	{
-		var a:int
+		var b:int
 		var list:[[int]]#cool comments
 	
-		Console.WriteLine a
+		Console.WriteLine b
 
-		Console.Readline () -> a
+		Console.Readline () -> b
 	
 		[[1..3], [1..5]] -> list
 		[[1, a, 3], [1 + 5]] -> var l:[[int]]
@@ -26,7 +37,7 @@ class Program
 	}
 	
 	#yeet
-	def Add :: a:int, b:int, c:int -> int
+	def Math :: b:int, c:int, d:int -> bool
 	{
 		#ret (a + (b + ((b * c) * c)))
 		

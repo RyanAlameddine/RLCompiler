@@ -1,6 +1,6 @@
 ﻿namespace RLParser.Scopes
 {
-    class VariableAssignmentIdentifier : IdentifierContext
+    public class VariableAssignmentIdentifier : IdentifierContext
     {
         public bool IsNewVariable { get; private set; } = false; 
         public override (bool, Context) Evaluate(char previous, string token, char next)

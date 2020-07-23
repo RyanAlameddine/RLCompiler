@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -34,6 +35,21 @@ namespace RLParser.Scopes
                     throw new CompileException("Return type is set to a variable declaration");
                 }
                 return ((IdentifierContext)last).Identifier;
+            }
+        }
+
+        public List<string> ParamTypes
+        {
+            get  
+            {
+                if (Children.Count < 3) return new List<string>() { "void" };
+                List<string> param = new List<string>();
+                for (int i = 1; i < Children.Count - 2; i++)
+                {
+                    var v = (VariableDefinitionContext)Children.ElementAt(i);
+                    param.Add(v.Type);
+                }
+                return param;
             }
         }
 

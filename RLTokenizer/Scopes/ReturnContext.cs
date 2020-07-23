@@ -1,6 +1,6 @@
 ﻿namespace RLParser.Scopes
 {
-    class ReturnContext : Context
+    public class ReturnContext : Context
     {
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {

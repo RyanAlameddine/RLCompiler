@@ -2,10 +2,9 @@
 
 namespace RLParser.Scopes
 {
-    internal class ConditionalExpressionContext : ExpressionContext
+    public class ConditionalExpressionContext : ExpressionContext
     {
         private readonly bool hasCondition;
-        private bool scopeComplete;
 
         public string Statement { get; }
 
@@ -19,7 +18,7 @@ namespace RLParser.Scopes
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
-            if (scopeComplete || (otherExitCharacters != null && otherExitCharacters.IsMatch(token)))
+            if (otherExitCharacters != null && otherExitCharacters.IsMatch(token))
             {
                 return Parent.Evaluate(previous, token, next);
             }

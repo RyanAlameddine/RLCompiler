@@ -25,6 +25,10 @@ namespace RLParser.Scopes
             {
                 return (true, new ClassHeaderContext());
             }
+            if (token == "using")
+            {
+                return (true, new UsingNamespaceContext());
+            }
 
             if (token.IsIdentifier())
                 return (false, this);

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace RLParser.Scopes
 {
-    class ExpressionContext : Context
+    public class ExpressionContext : Context
     {
         protected Regex otherExitCharacters;
 

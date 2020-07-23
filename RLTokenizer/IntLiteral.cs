@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RLParser
 {
-    class IntLiteral : Context
+    public class IntLiteral : Context
     {
         public int Number { get; set; }
 

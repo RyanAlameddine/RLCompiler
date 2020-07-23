@@ -8,15 +8,15 @@ namespace RLParser.Scopes
     /// <summary>
     /// Small scope in the namespace declaration
     /// </summary>
-    internal class NamespaceContext : Context
+    public class NamespaceContext : Context
     {
-        public LinkedList<string> Namespaces { get; private set; } = new LinkedList<string>();
+        public string Namespace { get; private set; }
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
             if (token.IsNewline())
             {
-                if (Namespaces.Count == 0)
+                if (Namespace == null)
                 {
                     throw new CompileException("No namespace identifier specified");
                 }
@@ -27,11 +27,10 @@ namespace RLParser.Scopes
 
             if (next.ToString().IsNewlineOrWhitespace() || next == '.')
             {
-                if (token.Length > 0 && token[0] == '.') token = token.Substring(1, token.Length - 1);
-
                 if (token.IsIdentifier())
                 {
-                    Namespaces.AddLast(token);
+                    if (Namespace != null) Namespace += '.';
+                    Namespace += token;
                     return (true, this);
                 }
                 throw new CompileException("Namespace token is not a valid identifier");
@@ -45,16 +44,6 @@ namespace RLParser.Scopes
             throw new CompileException("Invalid identifier in namespace declaration");
         }
 
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder("Namespace: ");
-            foreach(var ns in Namespaces)
-            {
-                sb.Append(ns);
-                sb.Append('.');
-            }
-            sb.Remove(sb.Length - 1, 1);
-            return sb.ToString();
-        }
+        public override string ToString() => $"Namespace: {Namespace}";
     }
 }

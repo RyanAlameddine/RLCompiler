@@ -45,6 +45,20 @@ namespace RLParser.Scopes
                 return (false, this);
             }
 
+            if (!(token + next).IsString())
+            {
+                if (token.IsString())
+                {
+                    var newChild = new ExpressionContext();
+                    newChild.RegisterChild(new StringLiteral(token));
+                    return (true, RegisterChild(newChild));
+                }
+            }
+            if (token[0] == '"')
+            {
+                return (false, this);
+            }
+
             //Identifier stage
             if (!(token + next).IsIdentifier())
             {

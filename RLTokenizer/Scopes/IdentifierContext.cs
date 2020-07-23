@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RLParser.Scopes
 {
-    class IdentifierContext : Context
+    public class IdentifierContext : Context
     {
         private string identifier = null;
         public string Identifier 

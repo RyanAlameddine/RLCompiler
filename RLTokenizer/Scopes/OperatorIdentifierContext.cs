@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RLParser.Scopes
 {
-    class OperatorIdentifierContext : IdentifierContext
+    public class OperatorIdentifierContext : IdentifierContext
     {
         public override string ToString() => $"Operator: {Identifier}";
     }

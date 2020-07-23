@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RLParser
 {
-    class StringLiteral : Context
+    public class StringLiteral : Context
     {
         public string String { get; set; }
 

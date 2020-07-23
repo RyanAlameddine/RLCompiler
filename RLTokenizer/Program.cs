@@ -14,8 +14,6 @@ namespace RLParser
 
             Console.WriteLine("Enter file name (small, SyntaxDefinition, test)");
             string path = @$"C:\Users\rhala\Code\RLCompiler\{Console.ReadLine()}.rl";
-            Console.WriteLine("Press 's' to start the refresh. Press any other key to refresh once");
-            char c = Console.ReadKey().KeyChar;
             while (true)
             {
                 string code = File.ReadAllText(path);
@@ -31,18 +29,7 @@ namespace RLParser
                 });
                 program.ConsolePrint();
 
-                if (Console.KeyAvailable)
-                {
-                    c = Console.ReadKey().KeyChar;
-                }
-                if (c == 's')
-                {
-                    Thread.Sleep(3000);
-                }
-                else
-                {
-                    c = Console.ReadKey().KeyChar;
-                }
+                Console.ReadKey();
             }
         }
     }

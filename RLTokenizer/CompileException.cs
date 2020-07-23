@@ -24,5 +24,12 @@ namespace RLParser
         protected CompileException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+
+        public CompileException SetStartAndEnd(Context c)
+        {
+            Start = c.Characters.Start.Value;
+            End = c.Characters.End.Value;
+            return this;
+        }
     }
 }

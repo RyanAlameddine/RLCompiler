@@ -10,9 +10,9 @@ namespace RLTypeChecker
     {
         private Action<CompileException, Context> onError;
 
-        private Dictionary<string, (string, Context)> Classes   { get; set; } = new Dictionary<string, (string, Context)>();
-        private Dictionary<string, (string, Context)> Functions { get; set; } = new Dictionary<string, (string, Context)>();
-        private Dictionary<string, (string, Context)> Variables { get; set; } = new Dictionary<string, (string, Context)>();
+        private Dictionary<string, (string type, Context context)> Classes   { get; set; } = new Dictionary<string, (string, Context)>();
+        private Dictionary<string, (string type, List<string>, Context context)> Functions { get; set; } = new Dictionary<string, (string, List<string>, Context)>();
+        private Dictionary<string, (string type, Context context)> Variables { get; set; } = new Dictionary<string, (string, Context)>();
 
         public SymbolTable Parent { get; } = null;
 
@@ -31,11 +31,12 @@ namespace RLTypeChecker
             Classes.Add(name, (type, context)); 
         }
 
-        public void RegisterFunction(string name, string type, Context context) 
+        public void RegisterFunction(string name, string type, List<string> typeParams, Context context) 
         { 
             if (FunctionsContains(name)) onError(new CompileException($"Function name {name} already defined in scope"), context);
-            Functions.Add(name, (type, context));
+            Functions.Add(name, (type, typeParams, context));
         }
+
 
         public void RegisterVariable(string name, string type, Context context) 
         { 
@@ -43,6 +44,38 @@ namespace RLTypeChecker
             Variables.Add(name, (type, context));
         }
 
+        public (string type, Context context) GetClass(string name, Context current)
+        {
+            if (Classes.TryGetValue(name, out var o)) return o;
+            if (Parent == null)
+            {
+                onError(new CompileException($"Class name {name} cannot be found"), current);
+                return ("void", current);
+            }
+            return Parent.GetClass(name, current);
+        }
+
+        public (string type, List<string> paramTypes, Context context) GetFunction(string name, Context current)
+        {
+            if (Functions.TryGetValue(name, out var o)) return o;
+            if (Parent == null)
+            {
+                onError(new CompileException($"Function name {name} cannot be found"), current);
+                return ("void", new List<string> { "void" }, current);
+            }
+            return Parent.GetFunction(name, current);
+        }
+
+        public (string type, Context context) GetVariable(string name, Context current)
+        {
+            if (Variables.TryGetValue(name, out var o)) return o;
+            if (Parent == null)
+            {
+                onError(new CompileException($"Variable name {name} cannot be found"), current);
+                return ("void", current);
+            }
+            return Parent.GetVariable(name, current);
+        }
 
 
         public bool VariablesContains(string name)
@@ -61,8 +94,8 @@ namespace RLTypeChecker
 
         public bool FunctionsContains(string name)
         {
-            if (Parent == null) return false;
             if (Functions.ContainsKey(name)) return true;
+            if (Parent == null) return false;
             else return Parent.FunctionsContains(name);
         }
     }
