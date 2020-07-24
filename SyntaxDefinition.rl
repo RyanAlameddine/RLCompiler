@@ -31,6 +31,8 @@
 
 namespace Test
 
+using System
+
 class Program
 {
 	var x:int

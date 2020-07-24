@@ -53,7 +53,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.rlang",
-				"match": "\\b(new|if|elif|else|while|for|public|private|internal|ret|in|namespace|class|def|var)\\b"
+				"match": "\\b(new|if|elif|else|while|for|public|private|internal|ret|in|namespace|using|class|def|var)\\b"
 			}]
 		},
 		"strings": {

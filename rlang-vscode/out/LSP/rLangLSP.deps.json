@@ -10,6 +10,7 @@
         "dependencies": {
           "OmniSharp.Extensions.LanguageServer": "0.17.2",
           "RLParser": "1.0.0",
+          "RLTypeChecker": "1.0.0",
           "System.Reactive.Reference": "4.4.0.0"
         },
         "runtime": {
@@ -457,6 +458,14 @@
           "RLParser.dll": {}
         }
       },
+      "RLTypeChecker/1.0.0": {
+        "dependencies": {
+          "RLParser": "1.0.0"
+        },
+        "runtime": {
+          "RLTypeChecker.dll": {}
+        }
+      },
       "System.Reactive.Reference/4.4.0.0": {
         "runtime": {
           "System.Reactive.dll": {
@@ -775,6 +784,11 @@
       "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
     },
     "RLParser/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RLTypeChecker/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

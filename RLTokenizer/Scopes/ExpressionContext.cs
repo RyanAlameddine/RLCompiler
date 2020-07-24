@@ -10,7 +10,7 @@ namespace RLParser.Scopes
     {
         protected Regex otherExitCharacters;
 
-        public bool Parenthesis { private get; set; } = false;
+        private int Parenthesis { get; set; } = 0;
 
         public bool IsFunctionCall 
         {
@@ -35,7 +35,7 @@ namespace RLParser.Scopes
             this.otherExitCharacters = otherExitCharacters;
         }
 
-        public ExpressionContext(Regex otherExitCharacters, bool Parenthesis)
+        public ExpressionContext(Regex otherExitCharacters, int Parenthesis)
         {
             this.otherExitCharacters = otherExitCharacters;
             this.Parenthesis = Parenthesis;
@@ -77,8 +77,7 @@ namespace RLParser.Scopes
                     var e = CheckEndOp(child);
                     if (e != default) return e;
 
-                    child.Parent = this;
-                    Children.AddLast(child);
+                    RegisterChild(child);
                     return (true, this);
                 }
                 return (false, this);
@@ -98,7 +97,8 @@ namespace RLParser.Scopes
                     var e = CheckEndOp(child);
                     if (e != default) return e;
 
-                    RegisterChild(new ExpressionContext().RegisterChild(child));
+                    //RegisterChild(new ExpressionContext().RegisterChild(child));
+                    RegisterChild(child);
                     return (true, this);
                 }
                 return (false, this);
@@ -114,8 +114,7 @@ namespace RLParser.Scopes
                     var e = CheckEndOp(child);
                     if (e != default) return e;
 
-                    child.Parent = this;
-                    this.Children.AddLast(child);
+                    RegisterChild(child);
                     return (true, this);
                 }
                 return (false, this);
@@ -172,13 +171,18 @@ namespace RLParser.Scopes
 
             if (token == "(")
             {
-                var child = RegisterChild(new ExpressionContext(null, true));
+                var child = RegisterChild(new ExpressionContext(null, Parenthesis + 1));
                 return (true, child);
             }
 
             if (token == ")")
             {
-                if (Parenthesis) return (true, Parent);
+                if (Parenthesis > 0)
+                {
+                    var ret = Parent;
+                    while (ret is ExpressionContext e && e.Parenthesis == Parenthesis) ret = ret.Parent;
+                    return (true, ret);
+                }
                 throw new CompileException("Closing parenthesis found without open parenthesis");
             }
 

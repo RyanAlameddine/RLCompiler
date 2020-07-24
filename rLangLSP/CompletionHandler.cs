@@ -57,6 +57,7 @@ namespace rLangLSP
             if (context is FileContext)
             {
                 items.Add(CreateKeyword("namespace "));
+                items.Add(CreateKeyword("using "));
                 items.Add(CreateKeyword("class "));
             }
 
