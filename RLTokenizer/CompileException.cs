@@ -6,9 +6,6 @@ namespace RLParser
     [Serializable]
     public class CompileException : Exception
     {
-        public int Start;
-        public int End;
-
         public CompileException()
         {
         }
@@ -23,13 +20,6 @@ namespace RLParser
 
         protected CompileException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-        }
-
-        public CompileException SetStartAndEnd(Context c)
-        {
-            Start = c.Characters.Start.Value;
-            End = c.Characters.End.Value;
-            return this;
         }
     }
 }

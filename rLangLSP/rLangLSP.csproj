@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RLTokenizer\RLParser.csproj" />
+    <ProjectReference Include="..\RLTypeChecker\RLTypeChecker.csproj" />
   </ItemGroup>
 
 </Project>

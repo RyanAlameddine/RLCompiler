@@ -16,14 +16,17 @@ namespace RLTypeChecker
 
         public SymbolTable Parent { get; } = null;
 
-        public List<SymbolTable> Children { get; } = new List<SymbolTable>();
+        public Dictionary<string, SymbolTable> Children { get; } = new Dictionary<string, SymbolTable>();
 
         public SymbolTable(Action<CompileException, Context> onError) { this.onError = onError; }
 
-        private SymbolTable(SymbolTable parent) : this(parent.onError) { Parent = parent; parent.Children.Add(this); }
+        private SymbolTable(string name, SymbolTable parent) : this(parent.onError) 
+        { 
+            Parent = parent; 
+            parent.Children.Add(name, this); 
+        }
 
-
-        public SymbolTable CreateChild() => new SymbolTable(this);
+        public SymbolTable CreateChild(string name) => new SymbolTable(name, this);
 
         public void RegisterClass(string name, string type, Context context) 
         {
@@ -34,6 +37,7 @@ namespace RLTypeChecker
         public void RegisterFunction(string name, string type, List<string> typeParams, Context context) 
         { 
             if (FunctionsContains(name)) onError(new CompileException($"Function name {name} already defined in scope"), context);
+            if (VariablesContains(name)) onError(new CompileException($"Name {name} already defined in scope"), context);
             Functions.Add(name, (type, typeParams, context));
         }
 

@@ -42,8 +42,6 @@ namespace RLParser
                     }
                     catch (CompileException e)
                     {
-                        e.Start = tokenStart;
-                        e.End = tokenStart + token.Length;
                         onError(e, scope);
                         
                         while (!codeSpan[i].ToString().IsNewline() || i == codeSpan.Length)

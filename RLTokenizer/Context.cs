@@ -9,9 +9,17 @@ namespace RLParser
         public Context Parent { get; set; }
         public LinkedList<Context> Children { get; } = new LinkedList<Context>();
 
-        public Range Characters { get; set; }
-        public Range Lines { get; set; }
+        private Range characters;
+        public Range Characters { get => getRangeContext().characters; }
+        private Range lines;
+        public Range Lines { get => getRangeContext().lines; }
         private bool rangesSet;
+        private Context getRangeContext()
+        {
+            if (Parent == this) return this;
+            if (!rangesSet) return Parent.getRangeContext();
+            return this;
+        }
 
         //public (string regex, Func<IScope> newScope)[] Rules { get; }
 
@@ -21,8 +29,8 @@ namespace RLParser
         public T RegisterChild<T>(T context) where T : Context
         {
             context.Parent = this;
-            context.Lines = Lines;
-            context.Characters = Characters;
+            context.lines = lines;
+            context.characters = characters;
             this.Children.AddLast(context);
 
             return context;
@@ -32,14 +40,14 @@ namespace RLParser
         {
             if (!rangesSet)
             {
-                Characters = new Range(character, character);
-                Lines = new Range(lineNumber, lineNumber);
+                characters = new Range(character, character);
+                lines = new Range(lineNumber, lineNumber);
                 rangesSet = true;
             }
             else 
             {
-                Characters = new Range(Characters.Start, character);
-                Lines = new Range(Lines.Start, lineNumber);
+                characters = new Range(Characters.Start, character);
+                lines = new Range(Lines.Start, lineNumber);
             }
         }
 

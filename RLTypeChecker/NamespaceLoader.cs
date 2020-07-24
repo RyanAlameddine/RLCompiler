@@ -29,13 +29,20 @@ namespace RLTypeChecker
             var methods = c.GetMethods();
             var fields = c.GetFields();
 
-            SymbolTable classTable = table.CreateChild();
+            SymbolTable classTable = table.CreateChild(c.Name);
 
             foreach(var method in methods)
             {
                 if (!method.IsPublic) continue;
                 if (method.IsStatic) RegisterMethod($"{c.Name}.{method.Name}", method, onError, table);
                 else RegisterMethod(method.Name, method, onError, classTable);
+            }
+
+            foreach (var field in fields)
+            {
+                if (!field.IsPublic) continue;
+                if (field.IsStatic) RegisterField($"{c.Name}.{field.Name}", field, onError, table);
+                else RegisterField(field.Name, field, onError, classTable);
             }
         }
 
@@ -44,10 +51,21 @@ namespace RLTypeChecker
             List<string> returnTypes = new List<string>();
             foreach(var param in method.GetParameters())
             {
-                returnTypes.Add(param.ParameterType.Name);
+                returnTypes.Add(GetTypeName(param.ParameterType));
             }
             if (table.FunctionsContains(name)) return;
-            table.RegisterFunction(name, method.ReturnType.Name, returnTypes, null);
+            table.RegisterFunction(name, GetTypeName(method.ReturnType), returnTypes, null);
+        }
+
+        private static void RegisterField(string name, FieldInfo field, Action<CompileException, Context> onError, SymbolTable table)
+        {
+            table.RegisterVariable(name, GetTypeName(field.FieldType), null);
+        }
+
+        private static string GetTypeName(Type t)
+        {
+            if (t.Name.ToLower().IsBuiltinType()) return t.Name.ToLower();
+            return t.Name;
         }
     }
 }

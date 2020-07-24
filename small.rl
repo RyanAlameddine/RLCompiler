@@ -24,12 +24,12 @@ class Program
 	
 	def Main
 	{
-		var b:int
+		"hi" -> var b:string
 		var list:[[int]]#cool comments
 	
 		Console.WriteLine b
 
-		Console.Readline () -> b
+		Console.ReadLine () -> b
 	
 		[[1..3], [1..5]] -> list
 		[[1, a, 3], [1 + 5]] -> var l:[[int]]

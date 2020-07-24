@@ -21,5 +21,6 @@ namespace RLParser
         public static bool IsNumber      (this string t) => new Regex("^[0-9]+$").IsMatch(t);
         public static bool IsString      (this string t) => new Regex("^\"([^\"])*\"$").IsMatch(t);
         public static bool IsKeyword     (this string t) => new Regex("^(if|elif|else|while|for|public|private|internal|ret|in|namespace|class|def|var)$").IsMatch(t);
+        public static bool IsBuiltinType (this string t) => new Regex("^(bool|int|string|char|void)$").IsMatch(t);
     }
 }

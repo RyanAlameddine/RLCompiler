@@ -4,9 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace RLParser.Scopes
 {
-    class ListDeclarationContext : Context
+    public class ListDeclarationContext : Context
     {
-        private bool commaPresent = true;
         private LinkedListNode<Context> lastPackaged = null;
         private readonly bool packageOnExit;
         private bool expressionComplete = false;

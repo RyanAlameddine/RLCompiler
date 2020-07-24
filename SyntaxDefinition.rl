@@ -35,22 +35,23 @@ class Program
 {
 	var x:int
 	var coolObject:Ball
-	var magicalDelegate:delegate
+	#delegate MathFunc :: int, int -> int
 
 	def Main :: args:[int] -> void
 	{
-		Add 1 2 3 -> x 
+		Add 1 2 3 -> x
 		
 		Add x 2 (Add 1 2 3) -> x
 		
-		new Ball "wowowie" -> coolObject
-		coolObject.PrintName ()
+		Ball "stan but in sphere form" -> coolObject
+
+		coolObject.PrintName (Add (x + 1) 2 3)
 
 		#[x * 2 for x in [1..5] if x / 2 < 5] -> var y:[int]
-		[x * 2 for x in [1..5]] -> var y:[int] 
-		#delegate magic
-		coolObject.PrintName -> magicalDelegate
-		magicalDelegate () 
+		[num * 2 for num in [1..5] if num / 2 < x] -> var y:[int] 
+		
+		#coolObject.PrintName -> magicalDelegate
+		#magicalDelegate () 
 	}
 
 	def Add :: a:int, b:int, c:int -> int
@@ -58,11 +59,6 @@ class Program
 		ret a + b + c
 	}
 }
-
-
-#(new file)
-
-namespace Test
 
 class Ball : Sprite
 {
@@ -74,7 +70,7 @@ private:
 	
 internal:
 
-	def PrintName
+	def PrintName :: a:int -> void
 	{
 		Console.Write (n + x:string)
 	}
@@ -103,5 +99,10 @@ public:
 		{
 			Console.WriteLine val
 		}
+	}
+
+	def Ball :: name:string -> Ball
+	{
+		name -> n
 	}
 }

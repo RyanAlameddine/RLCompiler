@@ -24,8 +24,8 @@ namespace rLangLSP
             return errors.Select((e) =>
             {
                 i++;
-                var start = DocumentHighlightHandler.GetPosition(code, e.Item1.Start);
-                var end = DocumentHighlightHandler.GetPosition(code, e.Item1.End);
+                var start = DocumentHighlightHandler.GetPosition(code, e.Item2.Characters.Start.Value);
+                var end = DocumentHighlightHandler.GetPosition(code, e.Item2.Characters.End.Value);
                 return new Diagnostic()
                 {
                     Message = e.Item1.Message,

@@ -23,7 +23,8 @@ namespace RLParser.Scopes
                 listClosedCount++;
                 if (listClosedCount == ListCount)
                 {
-                    Identifier = token[0..^ListCount];
+                    Identifier = token;
+                    for (int i = 0; i < listClosedCount; i++) Identifier = '[' + Identifier;
                     return (true, Parent);
                 }
                 if (listClosedCount > ListCount) throw new CompileException("Closing bracket found with no opening bracket in type declaration");

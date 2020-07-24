@@ -2,6 +2,7 @@
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Protocol.Window;
 using RLParser;
+using RLTypeChecker;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -22,17 +23,21 @@ namespace rLangLSP
             lines.AddOrUpdate(documentPath, l, (k, v) => l);
             code.AddOrUpdate(documentPath, buffer, (k, v) => buffer);
 
-            Context tree = RLParser.RLParser.Parse(buffer, (e, l) =>
+            int erc = 0;
+            Action<CompileException, Context> onError = (e, l) =>
             {
-                errors.AddOrUpdate(documentPath, new List<(CompileException, Context)>() { (e, l) }, (k, v) => {
+                errors.AddOrUpdate(documentPath, new List<(CompileException, Context)>() { (e, l) }, (k, v) =>
+                {
                     v.Add((e, l));
+                    erc++;
                     return v;
-                    });
-            });
+                });
+            };
+            Context tree = RLParser.RLParser.Parse(buffer, onError);
+            if (erc == 0) RlTypeChecker.TypeCheck(tree, onError);
             trees.AddOrUpdate(documentPath, tree, (k, v) => tree);
             try
             {
-
                 ASTNodeMessage[] strings = NodeMessages.GetMessages(tree);
                 var s = Newtonsoft.Json.JsonConvert.SerializeObject(strings);
                 router.SendNotification("rlang/loadAST", s);
