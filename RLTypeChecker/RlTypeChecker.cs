@@ -7,7 +7,7 @@ using System.Text;
 
 namespace RLTypeChecker
 {
-    public class RlTypeChecker
+    public static class RlTypeChecker
     {
         public static SymbolTable TypeCheck(Context root, Action<CompileException, Context> onError)
         {
@@ -16,6 +16,7 @@ namespace RLTypeChecker
 
         private static SymbolTable CheckFile(Context root, Action<CompileException, Context> onError, SymbolTable table)
         {
+            NamespaceLoader.LoadFrom("System", onError, table);
             foreach (var child in root.Children)
             {
                 if (child is ClassHeaderContext c)
@@ -25,6 +26,7 @@ namespace RLTypeChecker
                 }
                 else if (child is UsingNamespaceContext n)
                 {
+                    if (n.Namespace == "System") continue;
                     NamespaceLoader.LoadFrom(n.Namespace, onError, table);
                 }
             }
@@ -33,7 +35,9 @@ namespace RLTypeChecker
             {
                 if (child is ClassHeaderContext c)
                 {
-                    CheckClass(c.Children.First.Next.Value, onError, table.Children[c.Name]);
+                    var classBody = c.Children.First.Next;
+                    if (!(classBody.Value is ClassBodyContext)) classBody = classBody.Next;
+                    CheckClass(classBody.Value, onError, table.Children[c.Name]);
                 }
             }
 
@@ -45,6 +49,7 @@ namespace RLTypeChecker
         /// </summary>
         private static void LoadClass(Context root, string name, Action<CompileException, Context> onError, SymbolTable table)
         {
+            bool constructorPresent = false;
             foreach (var child in root.Children)
             {
                 if (child is VariableDefinitionContext v)
@@ -60,6 +65,7 @@ namespace RLTypeChecker
                 }
                 else if (child is FunctionHeaderContext f)
                 {
+                    if (f.Name == name) constructorPresent = true;
                     if (f.AccessModifier == AccessModifiers.Public)
                     {
                         if (f.Name == name)
@@ -77,6 +83,11 @@ namespace RLTypeChecker
                         table.RegisterFunction(f.Name, f.ReturnType, f.ParamTypes, f);
                     }
                 }
+            }
+
+            if (!constructorPresent)
+            {
+                table.Parent.RegisterFunction(name, name, new List<string>(), root);
             }
         }
 
@@ -297,6 +308,18 @@ namespace RLTypeChecker
                 SymbolTable root = table;
                 while (root.Parent != null) root = root.Parent;
 
+                while(root.Children.ContainsKey(type) && !root.Children[type].FunctionsContains(tail))
+                {
+                    //search base class
+                    type = root.GetClass(type, current).type;
+
+                    if(type == null)
+                    {
+                        //this will throw an error
+                        return table.GetFunction(name, current);
+                    }
+                }
+
                 return root.Children[type].GetFunction(tail, current);
             }
             //this will throw an error
@@ -319,6 +342,18 @@ namespace RLTypeChecker
                 var (type, _) = table.GetVariable(head, current);
                 SymbolTable root = table;
                 while (root.Parent != null) root = root.Parent;
+
+                while (root.Children.ContainsKey(type) && !root.Children[type].VariablesContains(tail))
+                {
+                    //search base class
+                    type = root.GetClass(type, current).type;
+
+                    if (type == null)
+                    {
+                        //this will throw an error
+                        return table.GetVariable(name, current);
+                    }
+                }
 
                 return root.Children[type].GetVariable(tail, current);
             }

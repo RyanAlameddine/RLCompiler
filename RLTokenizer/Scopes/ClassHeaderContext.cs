@@ -5,7 +5,7 @@ namespace RLParser.Scopes
     public class ClassHeaderContext : Context
     {
         public string Name { get => ((IdentifierContext)Children.First.Value).Identifier; }
-        public string Base { get => Children.Count < 3 ? null : ((IdentifierContext)Children.First.Next.Value).Identifier; }
+        public string Base { get => Children.Count < 3 ? "Object" : ((IdentifierContext)Children.First.Next.Value).Identifier; }
 
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {

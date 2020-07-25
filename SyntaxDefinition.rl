@@ -49,6 +49,9 @@ class Program
 
 		coolObject.PrintName (Add (x + 1) 2 3)
 
+		#calling function on base class
+		coolObject.Draw ()
+
 		#[x * 2 for x in [1..5] if x / 2 < 5] -> var y:[int]
 		[num * 2 for num in [1..5] if num / 2 < x] -> var y:[int] 
 		
@@ -106,5 +109,15 @@ public:
 	def Ball :: name:string -> Ball
 	{
 		name -> n
+	}
+}
+
+class Sprite
+{
+public:
+	
+	def Draw 
+	{
+		#some cool stuff in here
 	}
 }

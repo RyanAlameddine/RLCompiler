@@ -4,16 +4,14 @@ using System.Threading;
 
 namespace RLParser
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
 
             //I realize that this is not a real tokenizer
             //its a tokenizer/parser hybrid
-
-            Console.WriteLine("Enter file name (small, SyntaxDefinition, test)");
-            string path = @$"C:\Users\rhala\Code\RLCompiler\{Console.ReadLine()}.rl";
+            string path = GetPath();
             while (true)
             {
                 string code = File.ReadAllText(path);
@@ -31,6 +29,12 @@ namespace RLParser
 
                 Console.ReadKey();
             }
+        }
+
+        public static string GetPath()
+        {
+            Console.WriteLine("Enter file name (small, SyntaxDefinition, test, OOtest)");
+            return @$"C:\Users\rhala\Code\RLCompiler\{Console.ReadLine()}.rl";
         }
     }
 }

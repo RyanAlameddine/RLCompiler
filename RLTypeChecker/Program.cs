@@ -8,8 +8,7 @@ namespace RLTypeChecker
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter file name (small, SyntaxDefinition, test)");
-            string path = @$"C:\Users\rhala\Code\RLCompiler\{Console.ReadLine()}.rl";
+            string path = RLParser.Program.GetPath();
             while (true)
             {
                 string code = File.ReadAllText(path);
