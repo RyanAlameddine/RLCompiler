@@ -37,7 +37,7 @@ namespace RLTypeChecker
                 {
                     var classBody = c.Children.First.Next;
                     if (!(classBody.Value is ClassBodyContext)) classBody = classBody.Next;
-                    CheckClass(classBody.Value, onError, table.Children[c.Name]);
+                    CheckClass(classBody.Value, onError, table.Children[c.Name].Children["classMembers"]);
                 }
             }
 
@@ -50,6 +50,7 @@ namespace RLTypeChecker
         private static void LoadClass(Context root, string name, Action<CompileException, Context> onError, SymbolTable table)
         {
             bool constructorPresent = false;
+            SymbolTable privateChild = table.CreateChild("classMembers");
             foreach (var child in root.Children)
             {
                 if (child is VariableDefinitionContext v)
@@ -60,7 +61,7 @@ namespace RLTypeChecker
                     }
                     else
                     {
-                        table.RegisterVariable(v.Name, v.Type, v);
+                        privateChild.RegisterVariable(v.Name, v.Type, v);
                     }
                 }
                 else if (child is FunctionHeaderContext f)
@@ -80,7 +81,7 @@ namespace RLTypeChecker
                     }
                     else
                     {
-                        table.RegisterFunction(f.Name, f.ReturnType, f.ParamTypes, f);
+                        privateChild.RegisterFunction(f.Name, f.ReturnType, f.ParamTypes, f);
                     }
                 }
             }
@@ -169,11 +170,11 @@ namespace RLTypeChecker
                 else
                 {
                     string name = v.Identifier;
-                    type = table.GetVariable(name, expression).type;
+                    type = FindVariable(table, name, expression).type;
                 }
 
                 string expressionType = GetExpressionType(expression.Children.First.Value, onError, table);
-                if (type != expressionType) 
+                if (expressionType != "void" && type != expressionType) 
                     onError(new CompileException($"Type of expression in statement does not match type of assignment"), expression);
 
                 return;

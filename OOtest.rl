@@ -1,6 +1,7 @@
 #using System is automatically included
+using System
 
-namespace System.Test
+namespace Animal.Classifications
 
 class Animal
 {
@@ -23,7 +24,8 @@ public:
 class Cat : Animal
 {
 	var catName:string
-
+	
+public:
 	def Cat :: name:string -> cat
 	{
 		name -> catName
@@ -41,9 +43,7 @@ class Giraffe : Animal
 
 	def Mutate :: Cat 
 	{
-		var cat:Cat
-
-		Cat () -> cat
+		Cat "cat" -> var cat:Cat
 		
 		ret cat
 	}

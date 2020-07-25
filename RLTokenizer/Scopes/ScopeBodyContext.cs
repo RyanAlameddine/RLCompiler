@@ -62,6 +62,10 @@ namespace RLParser.Scopes
             //Identifier stage
             if (!(token + next).IsIdentifier())
             {
+                if(token == "(")
+                {
+                    return (true, RegisterChild(new ExpressionContext()).RegisterChild(new ExpressionContext(null, 1)));
+                }
                 if (token.IsIdentifier())
                 {
                     return (true, CheckStatementRules(token));
