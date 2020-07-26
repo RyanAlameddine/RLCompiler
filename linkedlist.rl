@@ -46,13 +46,39 @@ class LinkedList
         }
         ret false
     }
+
+    def Remove :: val:int -> void
+    {
+        head -> var current:Node
+
+        if head.val == val
+        {
+            RemoveHead ()
+        }
+
+        while current.next != ()
+        {
+            if (current.next).val == val
+            {
+                
+            }
+            current.next -> current
+        }
+    }
+
+    def RemoveHead
+    {
+        head.next -> head
+    }
 }
 
 class Node
 {
+public:   
+#private:
+    var next:Node
 public:
     var val:int
-    var next:Node
 
     def Node :: value:int -> Node
     {

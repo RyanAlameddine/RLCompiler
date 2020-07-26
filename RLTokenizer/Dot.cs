@@ -1,7 +1,14 @@
-﻿namespace RLParser
+﻿using RLParser.Scopes;
+
+namespace RLParser
 {
-    internal class Dot : Context
+    public class Dot : OperatorIdentifierContext
     {
+        public Dot()
+        {
+            Identifier = ".";
+        }
+
         public override (bool, Context) Evaluate(char previous, string token, char next)
         {
             throw new System.NotImplementedException();

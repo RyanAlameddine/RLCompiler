@@ -241,6 +241,13 @@ namespace RLTypeChecker
                     return (context.Children.Last.Value as IdentifierContext).Identifier;
                     //casting
                 }
+                if(op == ".")
+                {
+                    //TODO add function check?
+                    var id = context.Children.Last.Value as IdentifierContext;
+                    (string type, _) = LoadVarFromType(table, typeL, id.Identifier, context);
+                    return type;
+                }
                 
                 string typeR = GetExpressionType(context.Children.Last.Value, onError, table);
 
@@ -306,25 +313,30 @@ namespace RLTypeChecker
             if (table.VariablesContains(head))
             {
                 var (type, _) = table.GetVariable(head, current);
-                SymbolTable root = table;
-                while (root.Parent != null) root = root.Parent;
-
-                while(root.Children.ContainsKey(type) && !root.Children[type].FunctionsContains(tail))
-                {
-                    //search base class
-                    type = root.GetClass(type, current).type;
-
-                    if(type == null)
-                    {
-                        //this will throw an error
-                        return table.GetFunction(name, current);
-                    }
-                }
-
-                return root.Children[type].GetFunction(tail, current);
+                return LoadFuncFromType(table, type, tail, current);
             }
             //this will throw an error
             return table.GetFunction(name, current);
+        }
+
+        private static (string type, List<string> paramTypes, Context context) LoadFuncFromType(SymbolTable table, string type, string tail, Context current)
+        {
+            SymbolTable root = table;
+            while (root.Parent != null) root = root.Parent;
+
+            while (root.Children.ContainsKey(type) && !root.Children[type].FunctionsContains(tail))
+            {
+                //search base class
+                type = root.GetClass(type, current).type;
+
+                if (type == null)
+                {
+                    //this will throw an error
+                    return table.GetFunction(tail, current);
+                }
+            }
+
+            return root.Children[type].GetFunction(tail, current);
         }
 
         private static (string type, Context context) FindVariable(SymbolTable table, string name, Context current)
@@ -341,25 +353,30 @@ namespace RLTypeChecker
             if (table.VariablesContains(head))
             {
                 var (type, _) = table.GetVariable(head, current);
-                SymbolTable root = table;
-                while (root.Parent != null) root = root.Parent;
-
-                while (root.Children.ContainsKey(type) && !root.Children[type].VariablesContains(tail))
-                {
-                    //search base class
-                    type = root.GetClass(type, current).type;
-
-                    if (type == null)
-                    {
-                        //this will throw an error
-                        return table.GetVariable(name, current);
-                    }
-                }
-
-                return root.Children[type].GetVariable(tail, current);
+                return LoadVarFromType(table, type, tail, current);
             }
             //this will throw an error
             return table.GetVariable(name, current);
+        }
+
+        private static (string type, Context context) LoadVarFromType(SymbolTable table, string type, string tail, Context current)
+        {
+            SymbolTable root = table;
+            while (root.Parent != null) root = root.Parent;
+
+            while (root.Children.ContainsKey(type) && !root.Children[type].VariablesContains(tail))
+            {
+                //search base class
+                type = root.GetClass(type, current).type;
+
+                if (type == null)
+                {
+                    //this will throw an error
+                    return table.GetVariable(tail, current);
+                }
+            }
+
+            return root.Children[type].GetVariable(tail, current);
         }
     }
 }
