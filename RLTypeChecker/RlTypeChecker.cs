@@ -170,7 +170,7 @@ namespace RLTypeChecker
                 else
                 {
                     string name = v.Identifier;
-                    type = FindVariable(table, name, expression).type;
+                    type = TableSearcher.GetVar(table, name, expression).type;
                 }
 
                 string expressionType = GetExpressionType(expression.Children.First.Value, onError, table);
@@ -187,24 +187,31 @@ namespace RLTypeChecker
         {
             string name = (expression.Children.First.Value as IdentifierContext).Identifier;
             var children = expression.Children.Skip(1);
-            var (type, paramTypes, _) = FindFunction(table, name, expression);
+            var func = TableSearcher.GetFunc(table, name, expression);
+
+            return CheckFunctionCall(children, name, func, onError, table);
+        }
+
+        private static string CheckFunctionCall(IEnumerable<Context> children, string name, (string type, List<string> paramTypes, Context context) func, Action<CompileException, Context> onError, SymbolTable table)
+        {
+            var (type, paramTypes, _) = func;
             //var (type, paramTypes, _) = table.GetFunction(name, expression);
 
             //check for function calls with unit (for example, Console.Readline () )
             if (children.Count() == 1 && children.First() is ExpressionContext e && e.Children.Count == 0)
             {
-                if (!(paramTypes.Count == 0 || (paramTypes.Count == 1 && paramTypes[0] == "void"))) 
+                if (!(paramTypes.Count == 0 || (paramTypes.Count == 1 && paramTypes[0] == "void")))
                     onError(new CompileException($"() is not a valid parameter for {name}"), e);
                 return type;
             }
 
             //check for invalid parameter count
-            if (children.Count() != paramTypes.Count()) onError(new CompileException($"{name} function call does not have the correct number of parameters"), expression);
+            if (children.Count() != paramTypes.Count()) onError(new CompileException($"{name} function call does not have the correct number of parameters"), func.context);
 
             foreach (var parameter in children.Zip(paramTypes))
             {
                 string expressionType = GetExpressionType(parameter.First, onError, table);
-                if (expressionType != parameter.Second) onError(new CompileException($"{name} function call was provided a parameter of type {expressionType} instead of {parameter.Second}"), expression);
+                if (expressionType != parameter.Second) onError(new CompileException($"{name} function call was provided a parameter of type {expressionType} instead of {parameter.Second}"), func.context);
             }
 
             return type;
@@ -219,7 +226,7 @@ namespace RLTypeChecker
                 var name = id.Identifier;
                 if (name == "true" || name == "false") return "bool";
                 //TODO DELEGATE: if(table.FunctionsContains(id))
-                var (type, _) = FindVariable(table, name, context);
+                var (type, _) = TableSearcher.GetVar(table, name, context);
                 return type;
             }
             else if (context is ExpressionContext e && e.IsFunctionCall) return CheckFunctionCall(e, onError, table);
@@ -232,32 +239,47 @@ namespace RLTypeChecker
             if (context.Children.Count == 0) return "void";
             if (context.Children.Count == 1) return GetExpressionType(context.Children.First.Value, onError, table);
             //TODO fix this case (-1) -> (0-1)
-            if(context.Children.Count == 3)
+            if(context.Children.Count > 2)
             {
                 string typeL = GetExpressionType(context.Children.First.Value, onError, table);
                 string op = (context.Children.First.Next.Value as OperatorIdentifierContext).Identifier;
-                if (op == ":")
+                if (op == ".")
                 {
-                    return (context.Children.Last.Value as IdentifierContext).Identifier;
-                    //casting
+                    //variable
+                    if (context.Children.Count == 3)
+                    {
+                        var id = context.Children.Last.Value as IdentifierContext;
+                        (string type, _) = TableSearcher.LoadVarFromType(table, typeL, id.Identifier, context);
+                        return type;
+                    }
+                    //function
+                    else
+                    {
+                        var id = context.Children.First.Next.Next.Value as IdentifierContext;
+                        var func = TableSearcher.LoadFuncFromType(table, typeL, id.Identifier, context);
+                        return CheckFunctionCall(context.Children.Skip(3), id.Identifier, func, onError, table);
+                    }
                 }
-                if(op == ".")
-                {
-                    //TODO add function check?
-                    var id = context.Children.Last.Value as IdentifierContext;
-                    (string type, _) = LoadVarFromType(table, typeL, id.Identifier, context);
-                    return type;
-                }
-                
-                string typeR = GetExpressionType(context.Children.Last.Value, onError, table);
 
-                if (op.IsSpltOperator()) return "bool";
-                if (typeL != typeR)
+                if (context.Children.Count == 3)
                 {
-                    //TODO check for special cases
-                    onError(new CompileException($"Type {typeL} does not have functionality {op} with {typeR}"), context);
+                    if (op == ":")
+                    {
+                        return (context.Children.Last.Value as IdentifierContext).Identifier;
+                        //casting
+                    }
+
+                    string typeR = GetExpressionType(context.Children.Last.Value, onError, table);
+
+                    if (typeL != typeR)
+                    {
+                        //TODO check for special cases
+                        if (op.IsSpltOperator() && (typeL == "void" || typeR == "void")) return "bool";
+                        onError(new CompileException($"Type {typeL} does not have functionality {op} with {typeR}"), context);
+                    }
+                    if (op.IsSpltOperator()) return "bool";
+                    return typeL;
                 }
-                return typeL;
             }
 
             onError(new CompileException("Typechecker found invalid expression"), context);
@@ -292,91 +314,6 @@ namespace RLTypeChecker
                 onError(new CompileException("Conditional expression type in list comprehension is not bool"), c);
 
             return $"[{returnType}]";
-        }
-
-
-
-
-
-        //helper funcs
-        private static (string type, List<string> paramTypes, Context context) FindFunction(SymbolTable table, string name, Context current)
-        {
-            if (table.FunctionsContains(name)) return table.GetFunction(name, current);
-
-            int i = name.IndexOf('.');
-            //throw error
-            if (i == -1) return table.GetFunction(name, current);
-
-            string head = name[0..i];
-            string tail = name[(i + 1)..name.Length];
-
-            if (table.VariablesContains(head))
-            {
-                var (type, _) = table.GetVariable(head, current);
-                return LoadFuncFromType(table, type, tail, current);
-            }
-            //this will throw an error
-            return table.GetFunction(name, current);
-        }
-
-        private static (string type, List<string> paramTypes, Context context) LoadFuncFromType(SymbolTable table, string type, string tail, Context current)
-        {
-            SymbolTable root = table;
-            while (root.Parent != null) root = root.Parent;
-
-            while (root.Children.ContainsKey(type) && !root.Children[type].FunctionsContains(tail))
-            {
-                //search base class
-                type = root.GetClass(type, current).type;
-
-                if (type == null)
-                {
-                    //this will throw an error
-                    return table.GetFunction(tail, current);
-                }
-            }
-
-            return root.Children[type].GetFunction(tail, current);
-        }
-
-        private static (string type, Context context) FindVariable(SymbolTable table, string name, Context current)
-        {
-            if (table.VariablesContains(name)) return table.GetVariable(name, current);
-
-            int i = name.IndexOf('.');
-            //throw error
-            if (i == -1) return table.GetVariable(name, current);
-
-            string head = name[0..i];
-            string tail = name[(i + 1)..name.Length];
-
-            if (table.VariablesContains(head))
-            {
-                var (type, _) = table.GetVariable(head, current);
-                return LoadVarFromType(table, type, tail, current);
-            }
-            //this will throw an error
-            return table.GetVariable(name, current);
-        }
-
-        private static (string type, Context context) LoadVarFromType(SymbolTable table, string type, string tail, Context current)
-        {
-            SymbolTable root = table;
-            while (root.Parent != null) root = root.Parent;
-
-            while (root.Children.ContainsKey(type) && !root.Children[type].VariablesContains(tail))
-            {
-                //search base class
-                type = root.GetClass(type, current).type;
-
-                if (type == null)
-                {
-                    //this will throw an error
-                    return table.GetVariable(tail, current);
-                }
-            }
-
-            return root.Children[type].GetVariable(tail, current);
         }
     }
 }

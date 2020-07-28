@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using OmniSharp.Extensions.JsonRpc;
 using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
@@ -6,6 +7,7 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Window;
+using RLParser;
 using System;
 using System.Linq;
 using System.Threading;
@@ -57,7 +59,19 @@ namespace rLangLSP
 
         public async Task<Unit> Handle(DidOpenTextDocumentParams request, CancellationToken cancellationToken)
         {
-            return await TextChanged(request.TextDocument.Uri, request.TextDocument.Text);
+            await TextChanged(request.TextDocument.Uri, request.TextDocument.Text);
+
+            //var tree = _bufferManager.GetTree(request.TextDocument.Uri.ToString());
+            //try
+            //{
+            //    ASTNodeMessage[] strings = NodeMessages.GetMessages(tree);
+            //    var s = Newtonsoft.Json.JsonConvert.SerializeObject(strings);
+            //    _router.SendNotification("rlang/loadAST", s);
+            //}catch(Exception e)
+            //{
+
+            //}
+            return Unit.Value;
         }
 
         private async Task<Unit> TextChanged(DocumentUri uri, string text)
@@ -70,9 +84,8 @@ namespace rLangLSP
             _router.TextDocument.PublishDiagnostics(new PublishDiagnosticsParams()
             {
                 Uri = uri,
-                Diagnostics = Diagnostics.GetDiagnostics
-                (documentPath, _router, _bufferManager)
-            });
+                Diagnostics = Diagnostics.GetDiagnostics(_router, _bufferManager.GetCode(documentPath), _bufferManager.GetErrors(documentPath))
+            }) ;
             // _router.Window.LogInfo($"Updated buffer for document: {documentPath}\n{text}");
             return Unit.Value;
         }

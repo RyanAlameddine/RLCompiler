@@ -4,7 +4,7 @@
     "description": "Adds language support for the rLang programming language created by Github User RyanAlameddine",
     "publisher": "rhalameddine",
     "repository": "https://github.com/RyanAlameddine/RLCompiler/tree/master/rlang-vscode",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "engines": {
         "vscode": "^1.47.0"
     },

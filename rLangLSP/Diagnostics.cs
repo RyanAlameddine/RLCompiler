@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -8,15 +9,14 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Protocol.Window;
+using RLParser;
 
 namespace rLangLSP
 {
     static class Diagnostics
     {
-        public static Container<Diagnostic> GetDiagnostics(string URI, ILanguageServer router, BufferManager bufferManager)
+        public static Container<Diagnostic> GetDiagnostics(ILanguageServer router, string code, List<(CompileException, Context)> errors)
         {
-            var code = bufferManager.GetCode(URI);
-            var errors = bufferManager.GetErrors(URI);
             if(errors == default) return new Container<Diagnostic>();
 
             router.Window.LogInfo($"diagnosing + {errors.Count}");

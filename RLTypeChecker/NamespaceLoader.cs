@@ -13,12 +13,13 @@ namespace RLTypeChecker
         {
             var classes = AppDomain.CurrentDomain.GetAssemblies()
                        .SelectMany(t => t.GetTypes())
-                       .Where(t => t.IsClass && t.Namespace == Namespace);
+                       .Where(t => t.IsClass || t.IsValueType && t.Namespace == Namespace);
 
             foreach(var c in classes)
             {
                 if (c.ContainsGenericParameters) continue;
                 if (!c.IsPublic) continue;
+                if (table.ClassesContains(c.Name)) continue;
                 table.RegisterClass(c.Name, c.BaseType?.Name, null);
                 RegisterInstanceMembers(c, onError, table);
             }

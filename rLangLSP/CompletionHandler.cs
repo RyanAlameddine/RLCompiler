@@ -7,6 +7,7 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Window;
 using RLParser;
 using RLParser.Extensions;
 using RLParser.Scopes;
+using RLTypeChecker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace rLangLSP
         {
             router.Window.LogInfo("completion request");
             (var code, var lines, var tree) = bufferManager.Get(request.TextDocument.Uri.ToString());
+            var table = bufferManager.GetTable(request.TextDocument.Uri.ToString());
             int c = request.Position.Character;
             int l = request.Position.Line;
 
@@ -49,6 +51,8 @@ namespace rLangLSP
             router.Window.LogInfo(i.ToString());
 
             var context = tree.GetFirstAtChar(i);
+            router.Window.LogInfo(tree.ToString());
+            router.Window.LogInfo(i.ToString());
             router.Window.LogInfo(context.ToString());
 
             //creating items
@@ -60,8 +64,7 @@ namespace rLangLSP
                 items.Add(CreateKeyword("using "));
                 items.Add(CreateKeyword("class "));
             }
-
-            if (context is ClassBodyContext)
+            else if (context is ClassBodyContext)
             {
                 items.Add(CreateKeyword("var "));
                 items.Add(CreateKeyword("def "));
@@ -69,8 +72,25 @@ namespace rLangLSP
                 items.Add(CreateKeywordDrop("private:\n\t" , request.Position));
                 items.Add(CreateKeywordDrop("internal:\n\t", request.Position));
             }
+            else
+            {
+                GetMembers(table, items);
+            }
+            
 
             return items;
+        }
+
+        private void GetMembers(SymbolTable table, List<CompletionItem> items)
+        {
+            foreach (var child in table.Children)
+            {
+                var t = child.Value;
+                items.AddRange(t.Classes.Select((cl) => CreateKeyword(cl.Key)));
+                items.AddRange(t.Functions.Select((cl) => CreateKeyword(cl.Key)));
+                items.AddRange(t.Variables.Select((cl) => CreateKeyword(cl.Key)));
+                GetMembers(t, items);
+            }
         }
 
         private CompletionItem CreateKeywordDrop(string v, Position start)
@@ -115,7 +135,7 @@ namespace rLangLSP
                 if(code[i] == '\n')
                 {
                     line++;
-                    currentC = 0;
+                    currentC = -1;
                 }
                 if (line == l && c == currentC) return i;
                 currentC++;

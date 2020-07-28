@@ -10,9 +10,9 @@ namespace RLTypeChecker
     {
         private Action<CompileException, Context> onError;
 
-        private Dictionary<string, (string type, Context context)> Classes   { get; set; } = new Dictionary<string, (string, Context)>();
-        private Dictionary<string, (string type, List<string>, Context context)> Functions { get; set; } = new Dictionary<string, (string, List<string>, Context)>();
-        private Dictionary<string, (string type, Context context)> Variables { get; set; } = new Dictionary<string, (string, Context)>();
+        public Dictionary<string, (string type, Context context)> Classes   { get; private set; } = new Dictionary<string, (string, Context)>();
+        public Dictionary<string, (string type, List<string>, Context context)> Functions { get; private set; } = new Dictionary<string, (string, List<string>, Context)>();
+        public Dictionary<string, (string type, Context context)> Variables { get; private set; } = new Dictionary<string, (string, Context)>();
 
         public SymbolTable Parent { get; } = null;
 
@@ -31,7 +31,7 @@ namespace RLTypeChecker
         public void RegisterClass(string name, string type, Context context) 
         {
             if (ClassesContains(name)) onError(new CompileException($"Class name {name} already defined in scope"), context);
-            Classes.Add(name, (type, context)); 
+            Classes.Add(name, (type, context));
         }
 
         public void RegisterFunction(string name, string type, List<string> typeParams, Context context) 
@@ -84,15 +84,15 @@ namespace RLTypeChecker
 
         public bool VariablesContains(string name)
         {
-            if (Parent == null) return false;
             if (Variables.ContainsKey(name)) return true;
+            if (Parent == null) return false;
             else return Parent.VariablesContains(name);
         }
 
         public bool ClassesContains(string name)
         {
-            if (Parent == null) return false;
             if (Classes.ContainsKey(name)) return true;
+            if (Parent == null) return false;
             else return Parent.ClassesContains(name);
         }
 

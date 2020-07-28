@@ -1,6 +1,7 @@
 ﻿using RLParser.Scopes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -69,6 +70,8 @@ namespace RLParser
             {
                 onError(new CompileException("Invalid or incomplete namespace/class declaration"), scope);
             }
+
+            root.RegisterNewCharReached(tokenStart, lineNumber);
             return root;
         }
 

@@ -5,6 +5,7 @@ class LinkedList
     var head:Node
     def LinkedList :: val:int -> LinkedList
     {
+
         Node val -> head
     }
 
@@ -16,7 +17,7 @@ class LinkedList
             Node val -> head
             ret ()
         }
-
+        
         while current.next != ()
         {
             current.next -> current
@@ -54,14 +55,11 @@ class LinkedList
         if head.val == val
         {
             RemoveHead ()
+            
         }
 
         while current.next != ()
         {
-            if (current.next).val == val
-            {
-                
-            }
             current.next -> current
         }
     }
@@ -69,6 +67,7 @@ class LinkedList
     def RemoveHead
     {
         head.next -> head
+
     }
 }
 
@@ -84,5 +83,6 @@ public:
     {
         value -> val
         () -> next
+        
     }
 }
