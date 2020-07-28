@@ -208,10 +208,10 @@ namespace RLTypeChecker
             //check for invalid parameter count
             if (children.Count() != paramTypes.Count()) onError(new CompileException($"{name} function call does not have the correct number of parameters"), func.context);
 
-            foreach (var parameter in children.Zip(paramTypes))
+            foreach (var parameter in children.Zip(paramTypes, (x, y) => (x, y)))
             {
-                string expressionType = GetExpressionType(parameter.First, onError, table);
-                if (expressionType != parameter.Second) onError(new CompileException($"{name} function call was provided a parameter of type {expressionType} instead of {parameter.Second}"), func.context);
+                string expressionType = GetExpressionType(parameter.x, onError, table);
+                if (expressionType != parameter.y) onError(new CompileException($"{name} function call was provided a parameter of type {expressionType} instead of {parameter.y}"), func.context);
             }
 
             return type;
@@ -304,7 +304,7 @@ namespace RLTypeChecker
         {
             string id = (l.Children.First.Next.Value as IdentifierContext).Identifier;
             string listType = GetExpressionType(l.Children.First.Next.Next.Value, onError, table);
-            string idType = listType[1..^1];
+            string idType = listType.Substring(1, listType.Length-2);
             table.RegisterVariable(id, idType, l);
 
             string returnType = GetExpressionType(l.Children.First.Value, onError, table);

@@ -18,7 +18,7 @@ namespace RLParser.Scopes
         public (string Name, string Type)[] InputVariables
         {
             get => 
-                Children.Skip(1).SkipLast(2).Cast<VariableDefinitionContext>()
+                Children.Skip(1).Take(Children.Count - 3).Cast<VariableDefinitionContext>()
                 .Select((x) => (x.Name, x.Type)).ToArray();
         }
 

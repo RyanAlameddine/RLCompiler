@@ -19,7 +19,7 @@ namespace RLParser
 
             //Used to check with the scope is changed
             Context previousScope = scope;
-            ReadOnlySpan<char> codeSpan = code;
+            ReadOnlySpan<char> codeSpan = new ReadOnlySpan<char>(code.ToArray());
             bool reset = true;
 
             int tokenStart = 0;
@@ -80,7 +80,7 @@ namespace RLParser
             if(token[0] == '#')
             {
                 reset = false;
-                if (token[^1] == '\n')
+                if (token[token.Length - 1] == '\n')
                 {
                     reset = true;
                 }

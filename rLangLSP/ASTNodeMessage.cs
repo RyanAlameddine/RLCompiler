@@ -17,14 +17,14 @@ namespace rLangLSP
 
         private static void getMessages(List<ASTNodeMessage> messages, Context root)
         {
-            int start = root.Characters.Start.Value;
-            int end = root.Characters.End.Value;
+            int start = root.Characters.Start;
+            int end = root.Characters.End;
             //if the start and end are undefined pick from parent
             var current = root;
             while (start == 0 && end == 0 && current.Parent != null && current.Parent != current)
             {
-                start = current.Characters.Start.Value;
-                end = current.Characters.End.Value;
+                start = current.Characters.Start;
+                end = current.Characters.End;
                 current = current.Parent;
             }
 

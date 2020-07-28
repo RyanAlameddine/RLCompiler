@@ -15,7 +15,7 @@ namespace RLParser.Extensions
                 if (result == null) continue;
                 return result;
             }
-            if (root.Characters.Start.Value <= c && root.Characters.End.Value >= c)
+            if (root.Characters.Start <= c && root.Characters.End >= c)
             {
                 return root;
             }

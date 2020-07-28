@@ -36,7 +36,7 @@ namespace RLTypeChecker
 
             string[] strings = name.Split('.');
             var currentVar = table.GetVariable(strings.First(), current);
-            foreach (var identifier in strings.Skip(1).SkipLast(1))
+            foreach (var identifier in strings.Skip(1).Take(strings.Length - 3))
             {
                 currentVar = LoadVarFromType(table, currentVar.type, identifier, current);
             }

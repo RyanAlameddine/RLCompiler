@@ -72,8 +72,8 @@ namespace rLangLSP
             var def = FindDefinition(token, tree);
             if (def == null) return items;
 
-            var start = DocumentHighlightHandler.GetPosition(code, def.Characters.Start.Value);
-            var end = DocumentHighlightHandler.GetPosition(code, def.Characters.End.Value);
+            var start = DocumentHighlightHandler.GetPosition(code, def.Characters.Start);
+            var end = DocumentHighlightHandler.GetPosition(code, def.Characters.End);
 
             router.Window.LogInfo("definition provided " + def);
 

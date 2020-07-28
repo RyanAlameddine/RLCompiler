@@ -20,7 +20,7 @@ namespace RLParser
                 Context program = RLParser.Parse(code, (e, l) =>
                 {
                     Console.WriteLine(e);
-                    Console.WriteLine("On line " + l.Lines.End.Value);
+                    Console.WriteLine("On line " + l.Lines.End);
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine();
@@ -34,7 +34,7 @@ namespace RLParser
         public static string GetPath()
         {
             Console.WriteLine("Enter file name (small, SyntaxDefinition, test, OOtest)");
-            return @$"C:\Users\rhala\Code\RLCompiler\{Console.ReadLine()}.rl";
+            return $@"C:\Users\rhala\Code\RLCompiler\{Console.ReadLine()}.rl";
         }
     }
 }

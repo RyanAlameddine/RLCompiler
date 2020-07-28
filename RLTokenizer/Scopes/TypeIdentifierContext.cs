@@ -18,7 +18,7 @@ namespace RLParser.Scopes
                 ListCount++;
                 return (true, this);
             }
-            if(token[^1] == ']')
+            if(token[token.Length - 1] == ']')
             {
                 listClosedCount++;
                 if (listClosedCount == ListCount)

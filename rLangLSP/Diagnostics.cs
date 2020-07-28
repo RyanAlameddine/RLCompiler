@@ -24,14 +24,14 @@ namespace rLangLSP
             return errors.Select((e) =>
             {
                 i++;
-                var start = DocumentHighlightHandler.GetPosition(code, e.Item2.Characters.Start.Value);
-                var end = DocumentHighlightHandler.GetPosition(code, e.Item2.Characters.End.Value);
+                var start = DocumentHighlightHandler.GetPosition(code, e.Item2.Characters.Start);
+                var end = DocumentHighlightHandler.GetPosition(code, e.Item2.Characters.End);
                 return new Diagnostic()
                 {
                     Message = e.Item1.Message,
                     Code = i,
                     Severity = DiagnosticSeverity.Error,
-                    Range = new Range(start, end)
+                    Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(start, end)
                 };
             }).ToArray();
         }

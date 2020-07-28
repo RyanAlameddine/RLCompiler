@@ -59,7 +59,7 @@ namespace RLParser
         private void ConsolePrint(int depth)
         {
             int color = 1;
-            Console.Write(Lines.Start.Value.ToString("D3"));
+            Console.Write(Lines.Start.ToString("D3"));
             for (int i = 0; i < depth; i++)
             {
                 if (color > 15) color -= 15;

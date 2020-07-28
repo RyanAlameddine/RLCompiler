@@ -18,7 +18,7 @@ namespace RLTypeChecker
                 Action<CompileException, Context> onError = (e, l) =>
                 {
                     Console.WriteLine(e);
-                    Console.WriteLine("On line " + l.Lines.End.Value);
+                    Console.WriteLine("On line " + l.Lines.End);
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine();
