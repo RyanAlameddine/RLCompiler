@@ -91,8 +91,15 @@ namespace ILEmitter
 
         public void CreateClass(SymbolTable classMemberTable)
         {
-            Constructor.GenerateIL(classMemberTable.Children[Constructor.Header.Name]);
-            foreach(var method in Methods.Values)
+            //public constructor
+            if (classMemberTable.Parent.Children.ContainsKey(Constructor.Header.Name))
+                Constructor.GenerateIL(classMemberTable.Parent.Children[Constructor.Header.Name]);
+            //private constructor
+            else
+                Constructor.GenerateIL(classMemberTable.Children[Constructor.Header.Name]);
+
+
+            foreach (var method in Methods.Values)
             {
                 method.GenerateIL(classMemberTable.Children[method.Header.Name]);
             }

@@ -78,11 +78,16 @@ namespace ILEmitter
 
         private static void GenerateFunctionCall(IdentifierContext identifierContext, IEnumerable<Context> children, SymbolTable table, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent, ref int stackDepth)
         {
-            foreach(var child in children)
+            var methodInfo = parent.parent.GetMethodInfo(identifierContext.Identifier, table);
+            if (!methodInfo.IsStatic)
+            {
+                generator.Emit(OpCodes.Ldarg_0);
+            }
+            foreach (var child in children)
             {
                 GenerateExpression(child, table, generator, variables, parent, ref stackDepth);
             }
-            generator.Emit(OpCodes.Call, parent.parent.GetMethodInfo(identifierContext.Identifier, table));
+            generator.Emit(OpCodes.Call, methodInfo);
         }
     }
 }

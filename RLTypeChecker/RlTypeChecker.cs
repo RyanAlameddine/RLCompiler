@@ -88,6 +88,7 @@ namespace RLTypeChecker
 
             if (!constructorPresent)
             {
+                table.CreateChild(name);
                 table.Parent.RegisterFunction(name, name, new List<string>(), root);
             }
         }

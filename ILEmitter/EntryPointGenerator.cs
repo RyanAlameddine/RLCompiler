@@ -17,7 +17,7 @@ namespace ILEmitter
             var ilGenerator = methodBuilder.GetILGenerator();
 
             ilGenerator.Emit(OpCodes.Newobj, constructor);
-
+            ilGenerator.Emit(OpCodes.Call, entryPoint);
             ilGenerator.Emit(OpCodes.Ret);
 
             typeBuilder.CreateType();

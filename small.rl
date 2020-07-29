@@ -2,9 +2,11 @@ namespace Small.Test
 
 class Program
 {
+public:
+
 	def Main
 	{
-		Console.WriteLine "hi"
+		Second ()
 	}
 
 	def Second
@@ -12,5 +14,6 @@ class Program
 		var x:int
 
 		5 -> x
+		Console.WriteLine "hi"
 	}
 }

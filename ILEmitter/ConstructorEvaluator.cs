@@ -18,7 +18,16 @@ namespace ILEmitter
             ConstructorBuilder = constructorBuilder;
         }
 
-        protected override ILGenerator GetGenerator() => ConstructorBuilder.GetILGenerator();
+        protected override ILGenerator GetGenerator()
+        {
+            var generator = ConstructorBuilder.GetILGenerator();
+
+            //TODO call base constructor
+            generator.Emit(OpCodes.Ldarg_0);    
+            generator.Emit(OpCodes.Call, typeof(object).GetConstructors().Single());
+
+            return generator;
+        }
 
         internal static ConstructorEvaluator GenerateConstructor(ConstructorBuilder constructorBuilder, ClassEvaluator parent, string name)
         {
