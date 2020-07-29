@@ -33,7 +33,7 @@ namespace RLParser
 
         public static string GetPath()
         {
-            Console.WriteLine("Enter file name (small, SyntaxDefinition, test, OOtest)");
+            Console.WriteLine("Enter file name (small, SyntaxDefinition, ExpressionTest, OOtest, linkedlist, test)");
             return $@"C:\Users\rhala\Code\RLCompiler\{Console.ReadLine()}.rl";
         }
     }

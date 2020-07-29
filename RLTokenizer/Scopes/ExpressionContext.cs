@@ -70,7 +70,7 @@ namespace RLParser.Scopes
 
             if (token[0] == '"')
             {
-                if (token[token.Length - 2] == '"' && token.Length != 1)
+                if (token[token.Length - 1] == '"' && token.Length != 1)
                 {
                     var child = new StringLiteral(token);
 

@@ -3,6 +3,15 @@ using System
 
 namespace Animal.Classifications
 
+class Program
+{
+	def Main :: param:int -> int
+	{
+		Cat "hi" -> var coolCat:Cat
+		ret 0
+	}
+}
+
 class Animal
 {
 

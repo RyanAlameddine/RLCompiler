@@ -44,7 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassEvaluator.cs" />
+    <Compile Include="ConstructorEvaluator.cs" />
+    <Compile Include="EntryPointGenerator.cs" />
+    <Compile Include="ExpressionGenerator.cs" />
     <Compile Include="FileEvaluator.cs" />
+    <Compile Include="MethodEvaluator.cs" />
+    <Compile Include="MethodEvaluatorBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

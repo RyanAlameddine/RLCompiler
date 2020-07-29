@@ -10,7 +10,7 @@ namespace RLParser
 
         public StringLiteral(string String)
         {
-            this.String = String;
+            this.String = String.Substring(1, String.Length - 2);
         }
 
         public override string ToString() => "String literal: " + String;

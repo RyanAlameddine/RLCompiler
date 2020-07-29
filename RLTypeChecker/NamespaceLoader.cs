@@ -11,9 +11,12 @@ namespace RLTypeChecker
     {
         public static void LoadFrom(string Namespace, Action<CompileException, Context> onError, SymbolTable table)
         {
-            var classes = AppDomain.CurrentDomain.GetAssemblies()
-                       .SelectMany(t => t.GetTypes())
-                       .Where(t => t.IsClass || t.IsValueType && t.Namespace == Namespace);
+            var alltypes = AppDomain.CurrentDomain.GetAssemblies()
+                       .SelectMany(t => t.GetTypes());
+
+            var classes = alltypes.Where(t => (t.IsClass || t.IsValueType) && t.Namespace == Namespace);
+
+            table.RegisterFunction("Console.WriteLine", "void", new List<string> { "string" }, null, typeof(Console).GetMethod("WriteLine", new Type[] { typeof(string) }));
 
             foreach(var c in classes)
             {
@@ -55,7 +58,8 @@ namespace RLTypeChecker
                 returnTypes.Add(GetTypeName(param.ParameterType));
             }
             if (table.FunctionsContains(name)) return;
-            table.RegisterFunction(name, GetTypeName(method.ReturnType), returnTypes, null);
+
+            table.RegisterFunction(name, GetTypeName(method.ReturnType), returnTypes, null, method);
         }
 
         private static void RegisterField(string name, FieldInfo field, Action<CompileException, Context> onError, SymbolTable table)

@@ -2,6 +2,7 @@
 using RLParser.Scopes;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace RLTypeChecker
@@ -13,6 +14,8 @@ namespace RLTypeChecker
         public Dictionary<string, (string type, Context context)> Classes   { get; private set; } = new Dictionary<string, (string, Context)>();
         public Dictionary<string, (string type, List<string>, Context context)> Functions { get; private set; } = new Dictionary<string, (string, List<string>, Context)>();
         public Dictionary<string, (string type, Context context)> Variables { get; private set; } = new Dictionary<string, (string, Context)>();
+
+        public Dictionary<string, MethodInfo> MethodInfos = new Dictionary<string, MethodInfo>();
 
         public SymbolTable Parent { get; } = null;
 
@@ -57,6 +60,12 @@ namespace RLTypeChecker
                 return ("void", current);
             }
             return Parent.GetClass(name, current);
+        }
+
+        public void RegisterFunction(string name, string v, List<string> returnTypes, Context p, MethodInfo method)
+        {
+            MethodInfos.Add(name, method);
+            RegisterFunction(name, v, returnTypes, p);
         }
 
         public (string type, List<string> paramTypes, Context context) GetFunction(string name, Context current)
