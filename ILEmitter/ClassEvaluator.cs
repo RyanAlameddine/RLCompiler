@@ -43,7 +43,15 @@ namespace ILEmitter
         {
             foreach(var child in header.Children.First.Next.Value.Children)
             {
-                if(child is FunctionHeaderContext func)
+                if (child is VariableDefinitionContext var)
+                {
+                    FieldAttributes fieldAttributes;
+                    if (var.AccessModifier == AccessModifiers.Public) fieldAttributes = FieldAttributes.Public;
+                    else fieldAttributes = FieldAttributes.Private;
+                    var fieldBuilder = TypeBuilder.DefineField(var.Name, parent.FindType(var.Type), fieldAttributes);
+                    Fields.Add(var.Name, fieldBuilder);
+                }
+                else if (child is FunctionHeaderContext func)
                 {
                     MethodAttributes methodAttributes;
                     if (func.AccessModifier == AccessModifiers.Public)  methodAttributes = MethodAttributes.Public;
@@ -57,6 +65,7 @@ namespace ILEmitter
                     {
                         var constructorBuilder = TypeBuilder.DefineConstructor(methodAttributes, CallingConventions.Standard, paramTypes);
                         Constructor = new ConstructorEvaluator(constructorBuilder, func, this);
+                        parent.Constructors.Add(header.Name, Constructor);
                     }
                     else 
                     {
@@ -74,18 +83,11 @@ namespace ILEmitter
                         }
                     }
                 }
-                else if(child is VariableDefinitionContext var)
-                {
-                    FieldAttributes fieldAttributes;
-                    if (var.AccessModifier == AccessModifiers.Public) fieldAttributes = FieldAttributes.Public;
-                    else fieldAttributes = FieldAttributes.Private;
-                    var fieldBuilder = TypeBuilder.DefineField(var.Name, parent.FindType(var.Type), fieldAttributes);
-                    Fields.Add(var.Name, fieldBuilder);
-                }
             }
             if (Constructor == null)
             {
                 Constructor = ConstructorEvaluator.GenerateConstructor(TypeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new Type[0]), this, header.Name);
+                parent.Constructors.Add(header.Name, Constructor);
             }
         }
 
@@ -107,16 +109,25 @@ namespace ILEmitter
             TypeBuilder.CreateType();
         }
 
-        public MethodInfo GetMethodInfo(string name, SymbolTable table)
+        public bool TryGetConstructor(string name, out ConstructorInfo constructor)
         {
-            if(Methods.ContainsKey(name)) return Methods[name].MethodBuilder;
+            constructor = null;
 
-            do
+            if (parent.Constructors.ContainsKey(name))
             {
-                if (table.MethodInfos.ContainsKey(name)) return table.MethodInfos[name];
-                table = table.Parent;
-            } while (table != null);
-            throw new CompileException($"Could not find function with name {name}");
+                constructor = parent.Constructors[name].ConstructorBuilder;
+                return true;
+            }
+            return false;
+        }
+
+        public ConstructorInfo GetConstructorInfo(string identifier, SymbolTable table)
+        {
+            foreach(var constructor in parent.Constructors)
+            {
+                if (constructor.Key == identifier) return constructor.Value.ConstructorBuilder;
+            }
+            throw new CompileException($"Cannot find constructor for {identifier}");
         }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="FileEvaluator.cs" />
     <Compile Include="MethodEvaluator.cs" />
     <Compile Include="MethodEvaluatorBase.cs" />
+    <Compile Include="OperatorGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

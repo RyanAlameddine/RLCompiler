@@ -53,6 +53,21 @@ namespace RLParser.Scopes
             }
         }
 
+        public List<string> ParamNames
+        {
+            get
+            {
+                if (Children.Count < 3) return new List<string>() { "_" };
+                List<string> param = new List<string>();
+                for (int i = 1; i < Children.Count - 2; i++)
+                {
+                    var v = (VariableDefinitionContext)Children.ElementAt(i);
+                    param.Add(v.Name);
+                }
+                return param;
+            }
+        }
+
         public FunctionHeaderContext(AccessModifiers accessModifier)
         {
             AccessModifier = accessModifier;

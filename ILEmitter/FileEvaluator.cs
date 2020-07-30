@@ -18,7 +18,8 @@ namespace ILEmitter
         
         Dictionary<string, ClassEvaluator> classes = new Dictionary<string, ClassEvaluator>();
         public readonly IEnumerable<Type> allTypes;
-        public readonly Dictionary<string, MethodInfo> allStaticFuncs;
+        public Dictionary<string, ConstructorEvaluator> Constructors { get; private set; } = new Dictionary<string, ConstructorEvaluator>();
+
 
         public FileEvaluator(string name, FileContext program)
         {
