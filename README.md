@@ -54,6 +54,8 @@ namespace Good.Old.Times
 #wow such good code
 class TestClass
 {
+    #function called Func
+    #takes two ints as parameters and returns a list of lists of int
     def Func :: a:int, b:int -> [[int]]
     {
         var list:[int]
