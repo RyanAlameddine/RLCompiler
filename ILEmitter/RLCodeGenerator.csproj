@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassEvaluator.cs" />
+    <Compile Include="ConditionalGenerator.cs" />
     <Compile Include="ConstructorEvaluator.cs" />
     <Compile Include="EntryPointGenerator.cs" />
     <Compile Include="ExpressionGenerator.cs" />

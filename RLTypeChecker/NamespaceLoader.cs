@@ -69,6 +69,7 @@ namespace RLTypeChecker
 
         private static string GetTypeName(Type t)
         {
+            if (t.Name == "Int32") return "int";
             if (t.Name.ToLower().IsBuiltinType()) return t.Name.ToLower();
             return t.Name;
         }

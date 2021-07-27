@@ -25,7 +25,7 @@
 # Char Literals: '\\?.'
 # String Literals: \".*?\"
 # Int Literals: [0-9]+
-# Identifiers: [a-zA-Z_]\w*
+# Identifiers: [a-zA-Z_]+
 
 # List Comprehensions: [output for identifier in list if condition]
 

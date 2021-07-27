@@ -218,7 +218,7 @@ namespace RLTypeChecker
             return type;
         }
 
-        private static string GetExpressionType(Context context, Action<CompileException, Context> onError, SymbolTable table)
+        public static string GetExpressionType(Context context, Action<CompileException, Context> onError, SymbolTable table)
         {
             if (context is IntLiteral i) return "int";
             else if (context is StringLiteral s) return "string";

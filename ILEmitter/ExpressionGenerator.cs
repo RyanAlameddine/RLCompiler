@@ -10,11 +10,13 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ILEmitter
+namespace RLCodeGenerator
 {
-    static class ExpressionGenerator
+    class ExpressionGenerator
     {
-        public static bool Generate(Context expression, SymbolTable functionTable, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent)
+        private Label? ifEndLabel = null;
+
+        public bool Generate(Context expression, SymbolTable functionTable, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent)
         {
             bool isRet = GenerateStatement(expression, functionTable, generator, variables, parent);
             if (isRet)
@@ -25,7 +27,7 @@ namespace ILEmitter
             return isRet;
         }
 
-        private static bool GenerateStatement(Context expression, SymbolTable table, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent)
+        private bool GenerateStatement(Context expression, SymbolTable table, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent)
         {
             if (expression.Children.Count == 2 && expression.Children.Last.Value is VariableAssignmentIdentifier v)
             {
@@ -43,8 +45,19 @@ namespace ILEmitter
             return false;
         }
 
-        private static void GenerateExpression(Context expression, SymbolTable table, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent)
+        private void GenerateExpression(Context expression, SymbolTable table, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent)
         {
+            if (expression is ConditionalExpressionContext condition)
+            {
+                ifEndLabel = ConditionalGenerator.Generate(condition, table, generator, variables, parent, this, ifEndLabel);
+                return;
+            }
+            else if(ifEndLabel != null)
+            {
+                generator.MarkLabel(ifEndLabel.Value);
+            }
+            ifEndLabel = null;
+
             if (expression is StringLiteral str)
             {
                 generator.Emit(OpCodes.Ldstr, str.String);
@@ -63,15 +76,13 @@ namespace ILEmitter
                 }
                 else
                 {
-                    parent.GenerateVariableLoad(generator, name);
+                    parent.GenerateVariableLoad(generator, name, false);
                 }
             }
-            else if (expression.Children.Count == 1)
-            {
-                GenerateExpression(expression.Children.First.Value, table, generator, variables, parent);
-            }
+            else if (expression is ExpressionContext && expression.Children.Count == 0) return;
+            else if (expression.Children.Count == 1) GenerateExpression(expression.Children.First.Value, table, generator, variables, parent);
             else if (expression is ExpressionContext e && e.IsFunctionCall) GenerateFunctionCall(e.Children.First.Value as IdentifierContext, e.Children.Skip(1), table, generator, variables, parent);
-            else if(expression.Children.Count == 3)
+            else if (expression.Children.Count >= 3)
             {
                 var leftChild = expression.Children.First.Value;
                 string opID = (expression.Children.First.Next.Value as OperatorIdentifierContext).Identifier;
@@ -79,35 +90,44 @@ namespace ILEmitter
 
                 GenerateExpression(leftChild, table, generator, variables, parent);
 
-                //casting
-                if(opID == ":")
+                //standard operator
+                if (expression.Children.Count == 3)
                 {
-                    string castType = (rightChild as IdentifierContext).Identifier;
-                    //TODO add casting
-                }
-                //general operators
-                else
-                {
-                    GenerateExpression(rightChild, table, generator, variables, parent);
+                    //casting
+                    if (opID == ":")
+                    {
+                        string castType = (rightChild as IdentifierContext).Identifier;
+                        //TODO add casting
+                    }
+                    //general operators
+                    else
+                    {
+                        GenerateExpression(rightChild, table, generator, variables, parent);
 
-                    OperatorGenerator.GenerateOperator(opID, generator);
+                        OperatorGenerator.GenerateOperator(opID, generator);
+                    }
                 }
+                else if(opID == ".")
+                {
+                    var idContext = expression.Children.First.Next.Next.Value as IdentifierContext;
+                    var paramChildren = expression.Children.Skip(3);
+
+                    Type type = parent.parent.parent.FindType(RlTypeChecker.GetExpressionType(leftChild, null, table));
+                    GenerateFunctionCall(idContext, paramChildren, table, generator, variables, parent, type);
+                }
+                else throw new CompileException("Invalid Expression found by RLCodeGenerator");
             }
-            else throw new CompileException("Invalid Expression found by ILEmitter");
+            else throw new CompileException("Invalid Expression found by RLCodeGenerator");
             
         }
 
-        private static void GenerateFunctionCall(IdentifierContext identifierContext, IEnumerable<Context> children, SymbolTable table, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent)
+        private void GenerateFunctionCall(IdentifierContext identifierContext, IEnumerable<Context> children, SymbolTable table, ILGenerator generator, Dictionary<string, LocalBuilder> variables, MethodEvaluatorBase parent, Type type = null)
         {
             var isConstructor = parent.parent.TryGetConstructor(identifierContext.Identifier, out var c);
             MethodInfo methodInfo = null;
             if (!isConstructor)
             {
-                methodInfo = parent.GetMethodInfo(identifierContext.Identifier, table);
-                if (!methodInfo.IsStatic)
-                {
-                    generator.Emit(OpCodes.Ldarg_0);
-                }
+                methodInfo = parent.GetMethodInfo(identifierContext.Identifier, generator, table, type);
             }
             foreach (var child in children)
             {

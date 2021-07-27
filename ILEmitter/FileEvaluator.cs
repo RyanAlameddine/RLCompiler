@@ -9,14 +9,14 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ILEmitter
+namespace RLCodeGenerator
 {
     class FileEvaluator
     {
         string name;
         FileContext program;
         
-        Dictionary<string, ClassEvaluator> classes = new Dictionary<string, ClassEvaluator>();
+        public Dictionary<string, ClassEvaluator> Classes = new Dictionary<string, ClassEvaluator>();
         public readonly IEnumerable<Type> allTypes;
         public Dictionary<string, ConstructorEvaluator> Constructors { get; private set; } = new Dictionary<string, ConstructorEvaluator>();
 
@@ -58,12 +58,12 @@ namespace ILEmitter
                     var eval = new ClassEvaluator(this, header);
                     eval.LoadClass(table.Children[header.Name], moduleBuilder);
 
-                    classes.Add(header.Name, eval);
+                    Classes.Add(header.Name, eval);
                 }
             }
 
             //Load classes
-            foreach (var child in classes)
+            foreach (var child in Classes)
             {
                 child.Value.LoadClassMembers(table.Children[child.Key].Children["classMembers"]);
                 if (child.Value.EntryPoint != null)
@@ -74,7 +74,7 @@ namespace ILEmitter
             }
 
             //Create method bodies and construct final Types
-            foreach (var child in classes)
+            foreach (var child in Classes)
             {
                 child.Value.CreateClass(table.Children[child.Key].Children["classMembers"]);
             }
@@ -82,7 +82,7 @@ namespace ILEmitter
 
         public Type FindType(string name)
         {
-            if (classes.ContainsKey(name)) return classes[name].TypeBuilder;
+            if (Classes.ContainsKey(name)) return Classes[name].TypeBuilder;
 
 
             //TODO HANDLE LISTS

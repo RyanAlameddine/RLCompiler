@@ -4,7 +4,7 @@ namespace RLParser.Scopes
 {
     public class ConditionalExpressionContext : ExpressionContext
     {
-        private readonly bool hasCondition;
+        public readonly bool hasCondition;
 
         public string Statement { get; }
 

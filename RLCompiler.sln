@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rLangLSP", "rLangLSP\rLangL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLTypeChecker", "RLTypeChecker\RLTypeChecker.csproj", "{F6E25233-86FB-48F0-900E-475102B46E25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILEmitter", "ILEmitter\ILEmitter.csproj", "{13A1369A-D313-4FE1-B156-D192028B4B10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RLCodeGenerator", "ILEmitter\RLCodeGenerator.csproj", "{13A1369A-D313-4FE1-B156-D192028B4B10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

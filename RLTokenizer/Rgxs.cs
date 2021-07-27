@@ -11,7 +11,7 @@ namespace RLParser
 
         public static bool IsWhitespace  (this string t) => new Regex("^( |\t|#)+$").IsMatch(t);
         public static bool IsNewline     (this string t) => new Regex("^(\n|\r|#)+$").IsMatch(t);
-        public static bool IsIdentifier  (this string t) => new Regex("^[a-zA-Z_][a-zA-Z\\.]*$").IsMatch(t);
+        public static bool IsIdentifier  (this string t) => new Regex("^[a-zA-Z_][a-zA-Z\\._]*$").IsMatch(t);
         
         public static bool IsOperator    (this string t) => new Regex("^(\\*|\\+|\\-|!|!=|/|=|==|\\||\\|\\||&|&&|:|\\<|\\>||\\>=|\\<=)$").IsMatch(t);
         public static bool IsEndOperator (this string t) => new Regex("^(\\*|\\/|:)$").IsMatch(t);
